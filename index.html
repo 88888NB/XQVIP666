@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>诅咒之岛服务中心</title>
+    <style>
+        /* 保持所有原有CSS变量和基础样式不变 */
+        :root {
+            --glass-bg: rgba(40, 40, 45, 0.45);
+            --glass-bg-elevated: rgba(50, 50, 55, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-border-strong: rgba(255, 255, 255, 0.25);
+            --glass-highlight: rgba(255, 255, 255, 0.15);
+            --liquid-glow: rgba(255, 255, 255, 0.3);
+            --liquid-shadow: rgba(0, 0, 0, 0.6);
+            --accent-lava: #FF5722;
+            --accent-lava-light: #FF8A65;
+            --accent-glow: rgba(255, 87, 34, 0.5);
+            --success: #34C759;
+            --danger: #FF3B30;
+            --warning: #FF9500;
+            --text-primary: rgba(255, 255, 255, 0.95);
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-tertiary: rgba(255, 255, 255, 0.5);
+            --radius-sm: 14px;
+            --radius-md: 20px;
+            --radius-lg: 28px;
+            --radius-xl: 36px;
+            --ios-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ios-ease: cubic-bezier(0.25, 0.8, 0.25, 1);
+            --ios-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+            --duration-fast: 0.2s;
+            --duration-normal: 0.4s;
+            --duration-slow: 0.6s;
+            --gold-color: #FFD700;
+            --gold-glow: rgba(255, 215, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+            letter-spacing: -0.01em;
+        }
+
+        /* 保持所有原有背景、动画、组件样式不变 */
+        .deep-space {
+            position: fixed;
+            inset: 0;
+            z-index: -3;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 100, 50, 0.15), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 80%, rgba(100, 50, 200, 0.1), transparent),
+                radial-gradient(circle at 20% 50%, rgba(255, 150, 50, 0.08), transparent 50%),
+                linear-gradient(180deg, #0a0a0f 0%, #050508 100%);
+            animation: ambientBreath 8s ease-in-out infinite;
+        }
+
+        @keyframes ambientBreath {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.02); }
+        }
+
+        .liquid-layer {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -2;
+            opacity: 0.6;
+            will-change: transform;
+        }
+
+        .liquid-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(255,100,50,0.4), rgba(255,50,100,0.2));
+            top: -100px;
+            left: -100px;
+            animation: liquidFloat1 20s var(--ios-ease) infinite;
+        }
+
+        .liquid-2 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, rgba(100,100,255,0.3), rgba(50,200,255,0.2));
+            bottom: 10%;
+            right: -50px;
+            animation: liquidFloat2 15s var(--ios-ease) infinite;
+        }
+
+        .liquid-3 {
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 200, 100, 0.2);
+            top: 40%;
+            left: 50%;
+            margin-left: -100px;
+            animation: liquidFloat3 18s var(--ios-ease) infinite;
+        }
+
+        @keyframes liquidFloat1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(40px, -30px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.98); }
+        }
+
+        @keyframes liquidFloat2 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-30px, -20px) rotate(180deg); }
+        }
+
+        @keyframes liquidFloat3 {
+            0%, 100% { transform: translate(-50%, 0) scale(1); }
+            50% { transform: translate(-50%, -30px) scale(1.1); }
+        }
+
+        /* 修改容器样式，为底部导航留出空间 */
+        .container {
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: calc(env(safe-area-inset-bottom) + 80px); /* 为底部导航留出空间 */
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .lang-switcher {
+            position: fixed;
+            top: max(16px, env(safe-area-inset-top));
+            right: 16px;
+            z-index: 1000;
+            display: flex;
+            gap: 4px;
+            padding: 4px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(30px) saturate(200%);
+            border-radius: 100px;
+            border: 0.5px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            animation: slideInDown 0.6s var(--ios-spring) backwards;
+            animation-delay: 0.2s;
+        }
+
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-20px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .lang-btn {
+            padding: 6px 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ios-smooth);
+            position: relative;
+            overflow: hidden;
+            transform: scale(1);
+        }
+
+        .lang-btn:active { transform: scale(0.92); transition-duration: 0.1s; }
+
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.25);
+            color: var(--text-primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            animation: popIn 0.4s var(--ios-spring);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); }
+            70% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .glass-card {
+            width: 100%;
+            max-width: 360px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(60px) saturate(220%);
+            border-radius: var(--radius-xl);
+            border: 0.5px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 0 0.5px rgba(255, 255, 255, 0.1),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.2);
+            padding: 32px 24px;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform var(--duration-normal) var(--ios-smooth),
+                        box-shadow var(--duration-normal) var(--ios-smooth);
+            will-change: transform, opacity;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-2px) rotateX(2deg);
+            box-shadow: 
+                0 25px 70px rgba(0, 0, 0, 0.6),
+                0 0 0 0.5px rgba(255, 255, 255, 0.15),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.25);
+        }
+
+        .page.active .glass-card {
+            animation: cardMaterialize 0.7s var(--ios-spring) backwards;
+        }
+
+        @keyframes cardMaterialize {
+            0% {
+                opacity: 0;
+                transform: perspective(1000px) rotateX(-15deg) translateY(40px) scale(0.9);
+                filter: blur(10px);
+            }
+            60% {
+                transform: perspective(1000px) rotateX(5deg) translateY(-5px) scale(1.02);
+            }
+            100% {
+                opacity: 1;
+                transform: perspective(1000px) rotateX(0) translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
+            border-radius: var(--radius-xl) var(--radius-xl) 40% 40%;
+            pointer-events: none;
+            animation: shimmer 6s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        .icon-wrapper {
+            width: 76px;
+            height: 76px;
+            margin: 0 auto 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: iconFloat 6s ease-in-out infinite;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-8px) scale(1.02); }
+        }
+
+        .icon-glass-base {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(20px);
+            border-radius: 50%;
+            border: 0.5px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 2px rgba(255, 255, 255, 0.3);
+            transition: all var(--duration-fast) var(--ios-smooth);
+        }
+
+        .icon-wrapper:active .icon-glass-base {
+            transform: scale(0.95);
+            transition-duration: 0.1s;
+        }
+
+        .icon-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            transition: transform var(--duration-fast) var(--ios-smooth);
+        }
+
+        .icon-wrapper:hover .icon-image {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            animation: fadeInUp 0.5s var(--ios-ease) backwards;
+            animation-delay: 0.1s;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 28px;
+            line-height: 1.4;
+            font-weight: 400;
+            animation: fadeInUp 0.5s var(--ios-ease) backwards;
+            animation-delay: 0.15s;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+            position: relative;
+            animation: fadeInUp 0.5s var(--ios-ease) backwards;
+            animation-delay: 0.2s;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            margin-left: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: color var(--duration-fast) ease;
+        }
+
+        .glass-input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 0.5px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 17px;
+            font-weight: 500;
+            outline: none;
+            transition: all var(--duration-fast) var(--ios-smooth);
+            backdrop-filter: blur(10px);
+            transform: scale(1);
+            font-family: inherit;
+            letter-spacing: 0.02em;
+        }
+
+        .glass-input::placeholder {
+            color: var(--text-tertiary);
+            font-weight: 400;
+            transition: all var(--duration-fast) ease;
+        }
+
+        .glass-input:hover {
+            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .glass-input:focus {
+            background: rgba(0, 0, 0, 0.45);
+            border-color: rgba(255, 87, 34, 0.6);
+            box-shadow: 
+                0 0 0 4px rgba(255, 87, 34, 0.1),
+                inset 0 1px 2px rgba(0,0,0,0.2);
+            transform: scale(1.01);
+        }
+
+        .glass-input:focus::placeholder {
+            opacity: 0.5;
+            transform: translateX(5px);
+        }
+
+        .glass-input.error {
+            animation: inputShake 0.5s var(--ios-smooth);
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.2);
+        }
+
+        @keyframes inputShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+        }
+
+        .input-hint {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 6px;
+            margin-left: 4px;
+            opacity: 0;
+            transform: translateY(-5px);
+            transition: all var(--duration-fast) ease;
+        }
+
+        .glass-input:focus ~ .input-hint,
+        .input-group:hover .input-hint {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(180deg, rgba(255, 87, 34, 0.9) 0%, rgba(230, 74, 25, 0.9) 100%);
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all var(--duration-fast) var(--ios-smooth);
+            box-shadow: 
+                0 4px 20px rgba(255, 87, 34, 0.35),
+                inset 0 0.5px 1px rgba(255, 255, 255, 0.4);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            margin-top: 4px;
+            transform: scale(1);
+            animation: fadeInUp 0.5s var(--ios-ease) backwards;
+            animation-delay: 0.25s;
+        }
+
+        .glass-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+            opacity: 0;
+        }
+
+        .glass-button:active::after {
+            width: 300px;
+            height: 300px;
+            opacity: 1;
+            transition: 0s;
+        }
+
+        .glass-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.25), transparent);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            opacity: 0.8;
+            transition: opacity var(--duration-fast) ease;
+        }
+
+        .glass-button:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 
+                0 6px 25px rgba(255, 87, 34, 0.4),
+                inset 0 0.5px 1px rgba(255, 255, 255, 0.4);
+        }
+
+        .glass-button:hover::before { opacity: 1; }
+
+        .glass-button:active {
+            transform: scale(0.96) translateY(0);
+            transition-duration: 0.1s;
+            box-shadow: 0 2px 10px rgba(255, 87, 34, 0.25);
+        }
+
+        .glass-button.secondary {
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 
+                0 2px 10px rgba(0,0,0,0.1),
+                inset 0 0.5px 1px rgba(255,255,255,0.15);
+            margin-top: 12px;
+        }
+
+        .glass-button.secondary:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        .glass-button.secondary:active {
+            transform: scale(0.98);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-button.wechat {
+            background: linear-gradient(180deg, #07C160, #059b4d);
+            box-shadow: 0 4px 20px rgba(7, 193, 96, 0.35);
+        }
+
+        .glass-button.wechat:hover { box-shadow: 0 6px 25px rgba(7, 193, 96, 0.45); }
+
+        .glass-button.alipay {
+            background: linear-gradient(180deg, #1677FF, #0d5fd9);
+            box-shadow: 0 4px 20px rgba(22, 119, 255, 0.35);
+        }
+
+        .glass-button.alipay:hover { box-shadow: 0 6px 25px rgba(22, 119, 255, 0.45); }
+
+        .glass-button.gold {
+            background: linear-gradient(180deg, #FFD700, #FFA500);
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.35);
+            color: #000;
+            text-shadow: none;
+        }
+
+        .glass-button.gold:hover { 
+            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.45); 
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .payment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .payment-cell {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ios-smooth);
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: slideInRight 0.5s var(--ios-spring) backwards;
+            transform: translateX(0);
+        }
+
+        .payment-cell:nth-child(1) { animation-delay: 0.1s; }
+        .payment-cell:nth-child(2) { animation-delay: 0.2s; }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .payment-cell::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .payment-cell:hover::before { transform: translateX(100%); }
+
+        .payment-cell:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateX(4px) scale(1.01);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .payment-cell:active {
+            transform: scale(0.98);
+            transition-duration: 0.1s;
+        }
+
+        .payment-cell.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: rgba(255, 59, 48, 0.08);
+            border-color: rgba(255, 59, 48, 0.2);
+            animation: none;
+            transform: none !important;
+        }
+
+        .payment-cell.disabled:hover {
+            transform: none;
+            background: rgba(255, 59, 48, 0.08);
+        }
+
+        .payment-icon-wrap {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-right: 14px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            transition: transform var(--duration-fast) var(--ios-smooth);
+        }
+
+        .payment-cell:hover .payment-icon-wrap {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .payment-title-wrap {
+            flex: 1;
+            transition: transform var(--duration-fast) var(--ios-smooth);
+        }
+
+        .payment-cell:hover .payment-title-wrap { transform: translateX(4px); }
+
+        .payment-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .payment-subtitle {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            transition: color var(--duration-fast) ease;
+        }
+
+        .payment-cell:hover .payment-subtitle { color: var(--text-secondary); }
+
+        .badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            background: var(--danger);
+            color: white;
+            border-radius: 4px;
+            font-weight: 700;
+            animation: pulseBadge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseBadge {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(0.95); }
+        }
+
+        .maintenance-note {
+            font-size: 12px;
+            color: var(--danger);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .qr-container {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin: 20px 0;
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: scaleIn 0.5s var(--ios-spring) backwards;
+            animation-delay: 0.1s;
+            transform-origin: center;
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .qr-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.08), transparent);
+            pointer-events: none;
+            animation: shimmer 4s ease-in-out infinite;
+        }
+
+        .amount-display {
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(180deg, #FF8A65, #FF5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+            animation: countUp 0.6s var(--ios-ease) backwards;
+            animation-delay: 0.2s;
+        }
+
+        .amount-display.gold-text {
+            background: linear-gradient(180deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .qr-frame {
+            width: 170px;
+            height: 170px;
+            margin: 0 auto;
+            padding: 10px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 
+                0 8px 32px rgba(0,0,0,0.4),
+                0 0 0 1px rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 1;
+            transition: transform var(--duration-fast) var(--ios-smooth);
+        }
+
+        .qr-frame:hover { transform: scale(1.05); }
+
+        .qr-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            transition: opacity var(--duration-fast) ease;
+        }
+
+        .qr-caption {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            animation: fadeInUp 0.5s var(--ios-ease) backwards;
+            animation-delay: 0.3s;
+        }
+
+        .order-badge {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 100px;
+            font-family: 'SF Mono', monospace;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            letter-spacing: 0.5px;
+            animation: fadeIn 0.5s ease backwards;
+            animation-delay: 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .error-alert {
+            display: none;
+            background: rgba(255, 59, 48, 0.95);
+            backdrop-filter: blur(20px);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-align: center;
+            border: 0.5px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 20px rgba(255, 59, 48, 0.4);
+            transform-origin: center;
+        }
+
+        .error-alert.show {
+            display: block;
+            animation: errorPop 0.5s var(--ios-spring);
+        }
+
+        @keyframes errorPop {
+            0% { opacity: 0; transform: scale(0.5) translateY(-20px); }
+            70% { transform: scale(1.05) translateY(5px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .loader {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .loader.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .spinner-liquid {
+            width: 48px;
+            height: 48px;
+            position: relative;
+        }
+
+        .spinner-liquid::before,
+        .spinner-liquid::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid transparent;
+        }
+
+        .spinner-liquid::before {
+            border-top-color: var(--accent-lava);
+            border-right-color: rgba(255, 87, 34, 0.3);
+            animation: spin 1s linear infinite;
+        }
+
+        .spinner-liquid::after {
+            border: 3px solid rgba(255,255,255,0.1);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            margin-top: 16px;
+            font-size: 15px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .page {
+            display: none;
+            width: 100%;
+            opacity: 0;
+            transform: translateX(20px) scale(0.98);
+            transition: opacity var(--duration-normal) var(--ios-smooth),
+                        transform var(--duration-normal) var(--ios-smooth);
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            animation: pageEnter var(--duration-normal) var(--ios-spring);
+        }
+
+        @keyframes pageEnter {
+            0% {
+                opacity: 0;
+                transform: translateX(30px) scale(0.95);
+                filter: blur(4px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        .page.exit {
+            animation: pageExit var(--duration-fast) var(--ios-smooth) forwards;
+        }
+
+        @keyframes pageExit {
+            to {
+                opacity: 0;
+                transform: translateX(-20px) scale(0.98);
+                filter: blur(2px);
+            }
+        }
+
+        /* 新增：底部导航栏样式 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 12px 24px calc(12px + env(safe-area-inset-bottom));
+            background: rgba(20, 20, 25, 0.8);
+            backdrop-filter: blur(40px) saturate(200%);
+            border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            animation: slideUpNav 0.6s var(--ios-spring) backwards;
+            animation-delay: 0.3s;
+        }
+
+        @keyframes slideUpNav {
+            from {
+                opacity: 0;
+                transform: translateY(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-button {
+            flex: 1;
+            max-width: 160px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 0.5px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ios-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent);
+            opacity: 0;
+            transition: opacity var(--duration-fast) ease;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .nav-button:hover::before {
+            opacity: 1;
+        }
+
+        .nav-button:active {
+            transform: scale(0.96) translateY(0);
+            transition-duration: 0.1s;
+        }
+
+        .nav-button.active {
+            background: linear-gradient(180deg, rgba(255, 87, 34, 0.9), rgba(230, 74, 25, 0.9));
+            color: white;
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(255, 87, 34, 0.3);
+        }
+
+        .nav-button.active::before {
+            opacity: 1;
+            background: linear-gradient(180deg, rgba(255,255,255,0.2), transparent);
+        }
+
+        /* 金额选择器样式（代充页面用） */
+        .amount-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .amount-item {
+            padding: 12px 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ios-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .amount-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .amount-item.selected {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .amount-item.selected.diamond-selected {
+            background: rgba(100, 200, 255, 0.2);
+            border-color: rgba(100, 200, 255, 0.5);
+            box-shadow: 0 0 20px rgba(100, 200, 255, 0.2);
+        }
+
+        .amount-item .price {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: block;
+        }
+
+        .amount-item .original-price {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            text-decoration: line-through;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .amount-item .value {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+            display: block;
+        }
+
+        .amount-item.selected .price {
+            color: #FFD700;
+        }
+
+        .amount-item.selected.diamond-selected .price {
+            color: #64C8FF;
+        }
+
+        .amount-item .discount-badge {
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            background: linear-gradient(135deg, #FF3B30, #FF5722);
+            color: white;
+            font-size: 9px;
+            padding: 2px 5px;
+            border-radius: 0 var(--radius-sm) 0 var(--radius-sm);
+            font-weight: 700;
+        }
+
+        /* 货币类型切换器 */
+        .currency-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding: 4px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-md);
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .currency-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: calc(var(--radius-md) - 4px);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ios-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .currency-btn.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .currency-btn.diamond.active {
+            background: rgba(100, 200, 255, 0.2);
+            color: #64C8FF;
+        }
+
+        .currency-btn.coin.active {
+            background: rgba(255, 215, 0, 0.2);
+            color: #FFD700;
+        }
+
+        /* 商品信息显示 */
+        .product-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            margin: 16px 0;
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .product-info .label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .product-info .value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .product-info .value.diamond { color: #64C8FF; }
+        .product-info .value.coin { color: #FFD700; }
+
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body oncontextmenu="return false;" onkeydown="return disableKeys(event);">
+    <div class="deep-space"></div>
+    <div class="liquid-layer liquid-1"></div>
+    <div class="liquid-layer liquid-2"></div>
+    <div class="liquid-layer liquid-3"></div>
+
+    <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="zh">中</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="ja">日</button>
+        <button class="lang-btn" data-lang="ko">KR</button>
+    </div>
+
+    <div class="container">
+        <!-- 解封系统主页（原有） -->
+        <div class="page active" id="page-input">
+            <div class="glass-card">
+                <div class="icon-wrapper">
+                    <div class="icon-glass-base"></div>
+                    <img src="https://1813813973.v.123pan.cn/1813813973/45048158" class="icon-image" alt="Game Icon">
+                </div>
+                <h1 data-i18n="title">诅咒之岛解封系统</h1>
+                <p class="subtitle" data-i18n="subtitle">请输入您的游戏ID以申请解除账号限制</p>
+                
+                <div class="input-group">
+                    <label class="input-label" data-i18n="inputLabel">游戏ID</label>
+                    <input type="text" 
+                           class="glass-input" 
+                           id="gameId" 
+                           placeholder="请输入游戏名字"
+                           autocomplete="off"
+                           autocorrect="off"
+                           autocapitalize="off"
+                           spellcheck="false"
+                           oninput="filterInput(this)"
+                           onpaste="handlePaste(event)">
+                    <div class="input-hint" data-i18n="inputHint">仅支持字母、数字、下划线和横线</div>
+                </div>
+                
+                <button class="glass-button" onclick="handleSubmit()" data-i18n="submitBtn">进入解封系统</button>
+            </div>
+        </div>
+
+        <!-- 加载页（原有） -->
+        <div class="page" id="page-loading">
+            <div class="glass-card">
+                <div class="loader active">
+                    <div class="spinner-liquid"></div>
+                    <div class="loader-text" data-i18n="processing">正在连接服务器...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 支付方式页（原有） -->
+        <div class="page" id="page-methods">
+            <div class="glass-card">
+                <div class="icon-wrapper">
+                    <div class="icon-glass-base" style="background: linear-gradient(135deg, rgba(100,200,255,0.3), rgba(100,200,255,0.1));"></div>
+                    <div style="font-size: 32px; position: relative; z-index: 1;">💳</div>
+                </div>
+                <h1 data-i18n="selectMethod">选择支付方式</h1>
+                <p class="subtitle" data-i18n="selectSubtitle">选择支付方式完成验证</p>
+                
+                <div class="payment-list">
+                    <div class="payment-cell" onclick="selectWechat()">
+                        <div class="payment-icon-wrap" style="background: rgba(7, 193, 96, 0.2);">💬</div>
+                        <div class="payment-title-wrap">
+                            <div class="payment-title" data-i18n="wechatPay">微信支付</div>
+                            <div class="payment-subtitle" data-i18n="wechatDesc">微信扫一扫赞赏码</div>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-cell disabled" id="alipay-cell" onclick="selectAlipay()">
+                        <div class="payment-icon-wrap" style="background: rgba(22, 119, 255, 0.2);">💙</div>
+                        <div class="payment-title-wrap">
+                            <div class="payment-title">
+                                <span data-i18n="alipayPay">支付宝</span>
+                                <span class="badge" data-i18n="maintenanceBadge">维护</span>
+                            </div>
+                            <div class="payment-subtitle" data-i18n="alipayDesc">支付宝扫码支付</div>
+                            <div class="maintenance-note" data-i18n="alipayMaintenance">维护到3月15日</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="glass-button secondary" onclick="switchMainPage('input')" data-i18n="backBtn">返回</button>
+            </div>
+        </div>
+
+        <!-- 微信支付页（原有，已更新收款码） -->
+        <div class="page" id="page-wechat">
+            <div class="glass-card">
+                <div class="icon-wrapper">
+                    <div class="icon-glass-base" style="background: linear-gradient(135deg, rgba(7,193,96,0.3), rgba(7,193,96,0.1));"></div>
+                    <div style="font-size: 32px; position: relative; z-index: 1;">💬</div>
+                </div>
+                <h1 style="color: #07C160;" data-i18n="wechatPay">微信支付</h1>
+                
+                <div class="qr-container">
+                    <div class="amount-display">¥50.00</div>
+                    <div class="qr-frame">
+                        <img src="https://1813813973.v.123pan.cn/1813813973/45048231" class="qr-image" alt="WeChat Pay">
+                    </div>
+                    <div class="qr-caption" data-i18n="scanTip">请使用微信扫一扫上方赞赏码</div>
+                </div>
+
+                <div id="errorBox" class="error-alert" data-i18n="checkFailed">支付验证失败，未检测到您的付款记录</div>
+                
+                <button class="glass-button wechat" onclick="handleComplete()" data-i18n="completeBtn">我已完成支付</button>
+                <button class="glass-button secondary" onclick="showPage('methods')" data-i18n="backBtn">返回</button>
+            </div>
+        </div>
+
+        <!-- 支付宝支付页（原有） -->
+        <div class="page" id="page-alipay">
+            <div class="glass-card">
+                <div class="icon-wrapper">
+                    <div class="icon-glass-base" style="background: linear-gradient(135deg, rgba(22,119,255,0.3), rgba(22,119,255,0.1));"></div>
+                    <div style="font-size: 32px; position: relative; z-index: 1;">💙</div>
+                </div>
+                <h1 style="color: #1677FF;" data-i18n="alipayPay">支付宝支付</h1>
+                
+                <div class="qr-container">
+                    <div class="amount-display">¥50.00</div>
+                    <div class="qr-frame" id="alipayQrFrame">
+                        <div class="loader active" style="padding: 40px 0;">
+                            <div class="spinner-liquid"></div>
+                        </div>
+                    </div>
+                    <div class="qr-caption" data-i18n="alipayScanTip">请使用支付宝扫描上方二维码</div>
+                    <div style="text-align: center;">
+                        <span class="order-badge" id="orderId"></span>
+                    </div>
+                </div>
+
+                <div id="errorBoxAlipay" class="error-alert" data-i18n="checkFailed">支付验证失败，未检测到您的付款记录</div>
+                
+                <button class="glass-button alipay" onclick="handleComplete('alipay')" data-i18n="completeBtn">我已完成支付</button>
+                <button class="glass-button secondary" onclick="showPage('methods')" data-i18n="backBtn">返回</button>
+            </div>
+        </div>
+
+        <!-- 新增：代充页面（支持金币和钻石） -->
+        <div class="page" id="page-recharge">
+            <div class="glass-card">
+                <div class="icon-wrapper">
+                    <div class="icon-glass-base" style="background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,165,0,0.2));"></div>
+                    <div style="font-size: 32px; position: relative; z-index: 1;">💎</div>
+                </div>
+                <h1 style="color: #FFD700;" data-i18n="rechargeTitle">诅咒之岛代充</h1>
+                <p class="subtitle" data-i18n="rechargeSubtitle">超低折扣充值，秒速到账</p>
+                
+                <!-- 货币类型切换 -->
+                <div class="currency-toggle">
+                    <button class="currency-btn diamond active" onclick="switchCurrency('diamond')">
+                        <span>💎</span>
+                        <span data-i18n="diamond">钻石</span>
+                    </button>
+                    <button class="currency-btn coin" onclick="switchCurrency('coin')">
+                        <span>🪙</span>
+                        <span data-i18n="coin">金币</span>
+                    </button>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" data-i18n="uidLabel">游戏UID</label>
+                    <input type="text" 
+                           class="glass-input" 
+                           id="rechargeUid" 
+                           placeholder="请输入UID"
+                           autocomplete="off"
+                           autocorrect="off"
+                           autocapitalize="off"
+                           spellcheck="false"
+                           oninput="filterInput(this)"
+                           onpaste="handlePaste(event)">
+                </div>
+
+                <div class="amount-grid" id="amountGrid">
+                    <!-- 动态生成 -->
+                </div>
+
+                <button class="glass-button gold" onclick="handleRecharge()" data-i18n="rechargeBtn">立即充值</button>
+                
+                <div style="margin-top: 16px; text-align: center; font-size: 12px; color: var(--text-tertiary);">
+                    <span data-i18n="discountTip">全场4.5折起，比官方便宜55%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 新增：代充支付页 -->
+        <div class="page" id="page-recharge-pay">
+            <div class="glass-card">
+                <div class="icon-wrapper">
+                    <div class="icon-glass-base" style="background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,165,0,0.2));"></div>
+                    <div style="font-size: 32px; position: relative; z-index: 1;">💎</div>
+                </div>
+                <h1 style="color: #FFD700;" data-i18n="rechargePayTitle">代充支付</h1>
+                
+                <!-- 商品信息展示 -->
+                <div class="product-info">
+                    <span class="label" data-i18n="product">充值商品</span>
+                    <span class="value" id="productName">300钻石</span>
+                </div>
+                
+                <div class="qr-container">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px;">
+                        <span style="font-size: 14px; color: var(--text-tertiary); text-decoration: line-through;" id="originalPriceDisplay">¥30</span>
+                        <span style="font-size: 12px; color: var(--success); background: rgba(52, 199, 89, 0.15); padding: 2px 6px; border-radius: 4px; font-weight: 600;">省55%</span>
+                    </div>
+                    <div class="amount-display gold-text" id="rechargeAmount">¥13.5</div>
+                    <div class="qr-frame">
+                        <img src="https://1813813973.v.123pan.cn/1813813973/45048231" class="qr-image" alt="Recharge QR">
+                    </div>
+                    <div class="qr-caption" data-i18n="rechargeScanTip">请使用微信扫一扫完成代充支付</div>
+                    <div style="text-align: center; margin-top: 8px;">
+                        <span class="order-badge" id="rechargeOrderId"></span>
+                    </div>
+                </div>
+
+                <div id="errorBoxRecharge" class="error-alert" data-i18n="checkFailed">支付验证失败，未检测到您的付款记录</div>
+                
+                <button class="glass-button gold" onclick="handleComplete('recharge')" data-i18n="completeBtn">我已完成支付</button>
+                <button class="glass-button secondary" onclick="showPage('recharge')" data-i18n="backBtn">返回</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增：底部导航栏 -->
+    <div class="bottom-nav">
+        <button class="nav-button active" id="nav-unban" onclick="switchMainPage('input')">
+            <span>🔓</span>
+            <span data-i18n="navUnban">解封系统</span>
+        </button>
+        <button class="nav-button" id="nav-recharge" onclick="switchMainPage('recharge')">
+            <span>💎</span>
+            <span data-i18n="navRecharge">代充服务</span>
+        </button>
+    </div>
+
+    <script>
+        // 保持所有原有JavaScript，新增功能
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        function disableKeys(e) {
+            if (e.keyCode === 123) return false;
+            if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) return false;
+            if (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83)) return false;
+            return true;
+        }
+
+        document.addEventListener('click', function fs() {
+            document.documentElement.requestFullscreen?.();
+            document.removeEventListener('click', fs);
+        }, {once: true});
+
+        function filterInput(input) {
+            const regex = /[^a-zA-Z0-9_\-]/g;
+            if (regex.test(input.value)) {
+                input.value = input.value.replace(regex, '');
+                input.classList.add('error');
+                setTimeout(() => input.classList.remove('error'), 200);
+                if (navigator.vibrate) navigator.vibrate(10);
+            }
+            if (input.value.length > 20) {
+                input.value = input.value.substring(0, 20);
+            }
+        }
+
+        function handlePaste(e) {
+            e.preventDefault();
+            const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+            const filtered = pasteData.replace(/[^a-zA-Z0-9_\-]/g, '').substring(0, 20);
+            const input = e.target;
+            const start = input.selectionStart;
+            const end = input.selectionEnd;
+            const text = input.value;
+            input.value = text.substring(0, start) + filtered + text.substring(end);
+            input.setSelectionRange(start + filtered.length, start + filtered.length);
+            if (filtered.length < pasteData.length) {
+                input.classList.add('error');
+                setTimeout(() => input.classList.remove('error'), 200);
+            }
+        }
+
+        const i18n = {
+            zh: {
+                title: "诅咒之岛解封系统",
+                subtitle: "请输入您的游戏ID以申请解除账号限制",
+                inputLabel: "游戏ID",
+                inputHint: "仅支持字母、数字、下划线和横线",
+                submitBtn: "进入解封系统",
+                processing: "正在连接服务器...",
+                selectMethod: "选择支付方式",
+                selectSubtitle: "选择支付方式完成验证",
+                wechatPay: "微信支付",
+                wechatDesc: "微信扫一扫赞赏码",
+                alipayPay: "支付宝",
+                alipayDesc: "支付宝扫码支付",
+                alipayMaintenance: "维护到3月15日",
+                maintenanceBadge: "维护",
+                scanTip: "请使用微信扫一扫上方赞赏码",
+                alipayScanTip: "请使用支付宝扫描上方二维码",
+                completeBtn: "我已完成支付",
+                backBtn: "返回",
+                checkFailed: "支付验证失败，未检测到您的付款记录",
+                // 代充相关
+                rechargeTitle: "诅咒之岛代充",
+                rechargeSubtitle: "超低折扣充值，秒速到账",
+                uidLabel: "游戏UID",
+                rechargeBtn: "立即充值",
+                rechargeScanTip: "请使用微信扫一扫完成代充支付",
+                rechargePayTitle: "代充支付",
+                product: "充值商品",
+                navUnban: "解封系统",
+                navRecharge: "代充服务",
+                diamond: "钻石",
+                coin: "金币",
+                discountTip: "全场4.5折起，比官方便宜55%"
+            },
+            en: {
+                title: "Cursed Island Unban",
+                subtitle: "Enter Game ID to request account restoration",
+                inputLabel: "Game ID",
+                inputHint: "Letters, numbers, underscore and hyphen only",
+                submitBtn: "Enter System",
+                processing: "Connecting...",
+                selectMethod: "Payment",
+                selectSubtitle: "Select payment method",
+                wechatPay: "WeChat Pay",
+                wechatDesc: "Scan with WeChat",
+                alipayPay: "Alipay",
+                alipayDesc: "Pay with Alipay",
+                alipayMaintenance: "Maintained until Mar 15",
+                maintenanceBadge: "Maint",
+                scanTip: "Scan QR code with WeChat",
+                alipayScanTip: "Scan with Alipay",
+                completeBtn: "Complete",
+                backBtn: "Back",
+                checkFailed: "Payment verification failed",
+                rechargeTitle: "Cursed Island Recharge",
+                rechargeSubtitle: "Super discount recharge, instant delivery",
+                uidLabel: "Game UID",
+                rechargeBtn: "Recharge Now",
+                rechargeScanTip: "Scan with WeChat to complete recharge",
+                rechargePayTitle: "Recharge Payment",
+                product: "Product",
+                navUnban: "Unban System",
+                navRecharge: "Recharge",
+                diamond: "Diamonds",
+                coin: "Coins",
+                discountTip: "Up to 55% OFF official prices"
+            },
+            ja: {
+                title: "呪われた島 解禁",
+                subtitle: "ゲームIDを入力して制限解除を申請",
+                inputLabel: "ゲームID",
+                inputHint: "英数字、アンダースコア、ハイフンのみ",
+                submitBtn: "システムへ",
+                processing: "接続中...",
+                selectMethod: "支払い方法",
+                selectSubtitle: "支払い方法を選択",
+                wechatPay: "WeChat Pay",
+                wechatDesc: "WeChatでスキャン",
+                alipayPay: "Alipay",
+                alipayDesc: "Alipayで支払い",
+                alipayMaintenance: "3月15日までメンテ",
+                maintenanceBadge: "メンテ",
+                scanTip: "WeChatでQRコードをスキャン",
+                alipayScanTip: "Alipayでスキャン",
+                completeBtn: "完了",
+                backBtn: "戻る",
+                checkFailed: "支払い確認できませんでした",
+                rechargeTitle: "呪われた島 チャージ",
+                rechargeSubtitle: "超割引チャージ、即時入金",
+                uidLabel: "ゲームUID",
+                rechargeBtn: "チャージする",
+                rechargeScanTip: "WeChatでスキャンしてチャージ完了",
+                rechargePayTitle: "チャージ支払い",
+                product: "商品",
+                navUnban: "解禁システム",
+                navRecharge: "チャージ",
+                diamond: "ダイヤ",
+                coin: "コイン",
+                discountTip: "最大55%オフ"
+            },
+            ko: {
+                title: "저주받은 섬 복구",
+                subtitle: "게임 ID를 입력하여 제한 해제 신청",
+                inputLabel: "게임 ID",
+                inputHint: "문자, 숫자, 밑줄 및 하이픈만",
+                submitBtn: "시스템 입장",
+                processing: "연결 중...",
+                selectMethod: "결제 방법",
+                selectSubtitle: "결제 방법 선택",
+                wechatPay: "WeChat Pay",
+                wechatDesc: "WeChat으로 스캔",
+                alipayPay: "Alipay",
+                alipayDesc: "Alipay로 결제",
+                alipayMaintenance: "3월 15일까지 유지보수",
+                maintenanceBadge: "유지보수",
+                scanTip: "WeChat으로 QR 코드 스캔",
+                alipayScanTip: "Alipay로 스캔",
+                completeBtn: "완료",
+                backBtn: "돌아가기",
+                checkFailed: "결제 기록을 찾을 수 없습니다",
+                rechargeTitle: "저주받은 섬 충전",
+                rechargeSubtitle: "초저가 충전, 즉시 입금",
+                uidLabel: "게임 UID",
+                rechargeBtn: "충전하기",
+                rechargeScanTip: "WeChat으로 스캔하여 충전 완료",
+                rechargePayTitle: "충전 결제",
+                product: "상품",
+                navUnban: "복구 시스템",
+                navRecharge: "충전",
+                diamond: "다이아",
+                coin: "코인",
+                discountTip: "최대 55% 할인"
+            }
+        };
+
+        // 充值配置（比官方便宜5-6折，即按4.5折计算）
+        const rechargeConfig = {
+            diamond: {
+                name: { zh: '钻石', en: 'Diamonds', ja: 'ダイヤ', ko: '다이아' },
+                items: [
+                    { amount: 300, officialPrice: 30, discount: 0.45 },
+                    { amount: 680, officialPrice: 68, discount: 0.45 },
+                    { amount: 1280, officialPrice: 128, discount: 0.45 },
+                    { amount: 3280, officialPrice: 328, discount: 0.45 },
+                    { amount: 6480, officialPrice: 648, discount: 0.45 },
+                    { amount: 10000, officialPrice: 998, discount: 0.45 }
+                ]
+            },
+            coin: {
+                name: { zh: '金币', en: 'Coins', ja: 'コイン', ko: '코인' },
+                items: [
+                    { amount: 5000, officialPrice: 30, discount: 0.45 },
+                    { amount: 12000, officialPrice: 68, discount: 0.45 },
+                    { amount: 25000, officialPrice: 128, discount: 0.45 },
+                    { amount: 70000, officialPrice: 328, discount: 0.45 },
+                    { amount: 150000, officialPrice: 648, discount: 0.45 },
+                    { amount: 250000, officialPrice: 998, discount: 0.45 }
+                ]
+            }
+        };
+
+        let currentLang = localStorage.getItem('unbanLang') || 'zh';
+        let gameId = '';
+        let selectedRechargeAmount = null; // 存储选中的充值项
+        let currentCurrency = 'diamond'; // 当前货币类型
+        let MAINTENANCE_DATE = '2026-03-15';
+        let isMaintenance = new Date() < new Date(MAINTENANCE_DATE);
+        let currentMainPage = 'input'; // 记录当前主页面
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateLanguage(currentLang);
+            renderAmountGrid(); // 初始化充值网格
+            
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const lang = e.target.dataset.lang;
+                    switchLanguage(lang);
+                });
+            });
+
+            if (!isMaintenance) {
+                const cell = document.getElementById('alipay-cell');
+                cell.classList.remove('disabled');
+                cell.querySelector('.badge').style.display = 'none';
+                cell.querySelector('.maintenance-note').style.display = 'none';
+            }
+        });
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('unbanLang', lang);
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            updateLanguage(lang);
+            renderAmountGrid(); // 重新渲染以更新货币名称
+        }
+
+        function updateLanguage(lang) {
+            const texts = i18n[lang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                if (texts[el.dataset.i18n]) el.textContent = texts[el.dataset.i18n];
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                if (texts[el.dataset.i18nPlaceholder]) el.placeholder = texts[el.dataset.i18nPlaceholder];
+            });
+            document.title = texts.title;
+        }
+
+        function t(key) {
+            return i18n[currentLang][key] || key;
+        }
+
+        // 修改：页面切换函数，支持返回主页面
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + page).classList.add('active');
+            
+            if (page === 'alipay') generateAlipayQR();
+        }
+
+        // 新增：主页面切换（带底部导航更新）
+        function switchMainPage(page) {
+            currentMainPage = page;
+            
+            // 更新底部导航状态
+            document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+            if (page === 'input') {
+                document.getElementById('nav-unban').classList.add('active');
+            } else if (page === 'recharge') {
+                document.getElementById('nav-recharge').classList.add('active');
+            }
+            
+            // 显示对应页面
+            showPage(page);
+        }
+
+        // 新增：切换货币类型
+        function switchCurrency(type) {
+            currentCurrency = type;
+            
+            // 更新按钮状态
+            document.querySelectorAll('.currency-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.currency-btn.${type}`).classList.add('active');
+            
+            // 重新渲染金额网格
+            renderAmountGrid();
+            
+            // 重置选中
+            selectedRechargeAmount = null;
+            
+            if (navigator.vibrate) navigator.vibrate(10);
+        }
+
+        // 新增：渲染金额选择网格
+        function renderAmountGrid() {
+            const grid = document.getElementById('amountGrid');
+            const config = rechargeConfig[currentCurrency];
+            const currencyName = config.name[currentLang];
+            
+            grid.innerHTML = config.items.map((item, index) => {
+                const finalPrice = (item.officialPrice * item.discount).toFixed(1);
+                const savePercent = Math.round((1 - item.discount) * 100);
+                const isSelected = selectedRechargeAmount && 
+                                  selectedRechargeAmount.type === currentCurrency && 
+                                  selectedRechargeAmount.amount === item.amount;
+                
+                return `
+                    <div class="amount-item ${isSelected ? 'selected' : ''} ${currentCurrency === 'diamond' ? 'diamond-selected' : ''}" 
+                         onclick="selectAmount(${item.amount}, ${item.officialPrice}, ${item.discount})"
+                         style="animation: slideInRight 0.5s var(--ios-spring) backwards; animation-delay: ${index * 0.05}s">
+                        <span class="discount-badge">省${savePercent}%</span>
+                        <span class="price">¥${finalPrice}</span>
+                        <span class="original-price">¥${item.officialPrice}</span>
+                        <span class="value">${item.amount}${currencyName}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 修改：选择充值金额
+        function selectAmount(amount, officialPrice, discount) {
+            selectedRechargeAmount = {
+                type: currentCurrency,
+                amount: amount,
+                officialPrice: officialPrice,
+                discount: discount,
+                finalPrice: (officialPrice * discount).toFixed(1)
+            };
+            
+            // 重新渲染以更新选中状态
+            renderAmountGrid();
+            
+            if (navigator.vibrate) navigator.vibrate(10);
+        }
+
+        // 修改：处理充值
+        function handleRecharge() {
+            const input = document.getElementById('rechargeUid');
+            const uid = input.value.trim();
+            
+            if (!uid) {
+                input.classList.add('error');
+                setTimeout(() => input.classList.remove('error'), 500);
+                return;
+            }
+            
+            if (!selectedRechargeAmount) {
+                // 如果没有选择，默认选择第一个
+                const config = rechargeConfig[currentCurrency];
+                selectAmount(config.items[0].amount, config.items[0].officialPrice, config.items[0].discount);
+            }
+            
+            showPage('recharge-pay');
+            generateRechargeOrder();
+        }
+
+        // 修改：生成代充订单
+        function generateRechargeOrder() {
+            const orderId = 'RC' + Date.now();
+            document.getElementById('rechargeOrderId').textContent = orderId;
+            
+            // 更新显示
+            const config = rechargeConfig[selectedRechargeAmount.type];
+            const currencyName = config.name[currentLang];
+            
+            document.getElementById('productName').textContent = `${selectedRechargeAmount.amount}${currencyName}`;
+            document.getElementById('productName').className = `value ${selectedRechargeAmount.type}`;
+            document.getElementById('rechargeAmount').textContent = `¥${selectedRechargeAmount.finalPrice}`;
+            document.getElementById('originalPriceDisplay').textContent = `¥${selectedRechargeAmount.officialPrice}`;
+        }
+
+        function handleSubmit() {
+            const input = document.getElementById('gameId');
+            gameId = input.value.trim();
+            
+            if (!gameId) {
+                input.classList.add('error');
+                setTimeout(() => input.classList.remove('error'), 500);
+                return;
+            }
+            
+            showPage('loading');
+            setTimeout(() => showPage('methods'), 1200);
+        }
+
+        function selectWechat() {
+            showPage('wechat');
+        }
+
+        function selectAlipay() {
+            if (isMaintenance) {
+                if (navigator.vibrate) navigator.vibrate(50);
+                return;
+            }
+            showPage('alipay');
+        }
+
+        function generateAlipayQR() {
+            const container = document.getElementById('alipayQrFrame');
+            const orderId = 'UNBAN' + Date.now();
+            document.getElementById('orderId').textContent = orderId;
+            
+            setTimeout(() => {
+                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=alipay://${orderId}`;
+                container.innerHTML = `<img src="${qrUrl}" class="qr-image" alt="Alipay">`;
+            }, 800);
+        }
+
+        function handleComplete(type) {
+            const box = document.getElementById(type === 'alipay' ? 'errorBoxAlipay' : 
+                                               type === 'recharge' ? 'errorBoxRecharge' : 'errorBox');
+            if (navigator.vibrate) navigator.vibrate([50, 100, 50]);
+            
+            box.classList.add('show');
+            box.textContent = t('checkFailed');
+            
+            setTimeout(() => box.classList.remove('show'), 3000);
+        }
+
+        setInterval(() => {
+            const before = new Date();
+            debugger;
+            if (new Date() - before > 100) window.location.href = 'about:blank';
+        }, 1000);
+    </script>
+</body>
+</html>

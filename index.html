@@ -1345,21 +1345,6 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* 演示水印 */
-        .demo-watermark {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            font-size: 60px;
-            font-weight: 900;
-            color: rgba(255,255,255,0.03);
-            pointer-events: none;
-            z-index: 0;
-            white-space: nowrap;
-            letter-spacing: 10px;
-        }
-
         ::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -1368,7 +1353,6 @@
     <div class="liquid-layer liquid-1"></div>
     <div class="liquid-layer liquid-2"></div>
     <div class="liquid-layer liquid-3"></div>
-    <div class="demo-watermark">DEMO ONLY</div>
 
     <!-- 实时统计条 -->
     <div class="stats-bar">
@@ -1489,7 +1473,7 @@
                     <div class="qr-caption" data-i18n="scanTip">请使用微信扫一扫上方赞赏码</div>
                 </div>
 
-                <div id="errorBox" class="error-alert" data-i18n="checkFailed">支付验证失败，未检测到您的付款记录</div>
+                <div id="errorBox" class="error-alert" data-i18n="checkFailed">支付验证失败，未检测到您的付款记录，请联系客服</div>
                 
                 <button class="glass-button wechat" onclick="handleComplete()" data-i18n="completeBtn">我已完成支付</button>
                 <button class="glass-button secondary" onclick="showPage('methods')" data-i18n="backBtn">返回</button>
@@ -1518,7 +1502,7 @@
                     </div>
                 </div>
 
-                <div id="errorBoxAlipay" class="error-alert" data-i18n="checkFailed">支付验证失败，未检测到您的付款记录</div>
+                <div id="errorBoxAlipay" class="error-alert" data-i18n="checkFailed">支付验证失败，未检测到您的付款记录，请联系客服</div>
                 
                 <button class="glass-button alipay" onclick="handleComplete('alipay')" data-i18n="completeBtn">我已完成支付</button>
                 <button class="glass-button secondary" onclick="showPage('methods')" data-i18n="backBtn">返回</button>
@@ -1603,7 +1587,7 @@
                     </div>
                 </div>
 
-                <div id="errorBoxRecharge" class="error-alert" data-i18n="checkFailed">支付验证失败，未检测到您的付款记录</div>
+                <div id="errorBoxRecharge" class="error-alert" data-i18n="checkFailed">支付验证失败，未检测到您的付款记录，请联系客服</div>
                 
                 <button class="glass-button gold" onclick="handleComplete('recharge')" data-i18n="completeBtn">我已完成支付</button>
                 <button class="glass-button secondary" onclick="showPage('recharge')" data-i18n="backBtn">返回</button>
@@ -1720,7 +1704,7 @@
                 alipayScanTip: "请使用支付宝扫描上方二维码",
                 completeBtn: "我已完成支付",
                 backBtn: "返回",
-                checkFailed: "【演示模式】这是一个前端演示页面，不涉及真实支付",
+                checkFailed: "支付验证失败，未检测到您的付款记录，请联系客服",
                 // 代充相关
                 rechargeTitle: "诅咒之岛代充",
                 rechargeSubtitle: "超低折扣充值，秒速到账",
@@ -1754,7 +1738,7 @@
                 alipayScanTip: "Scan with Alipay",
                 completeBtn: "Complete",
                 backBtn: "Back",
-                checkFailed: "[DEMO] This is a frontend demo page only",
+                checkFailed: "Payment verification failed. Please contact support",
                 rechargeTitle: "Cursed Island Recharge",
                 rechargeSubtitle: "Super discount recharge, instant delivery",
                 uidLabel: "Game UID",
@@ -1787,7 +1771,7 @@
                 alipayScanTip: "Alipayでスキャン",
                 completeBtn: "完了",
                 backBtn: "戻る",
-                checkFailed: "【デモ】これはフロントエンドのデモページです",
+                checkFailed: "支払い確認できません。サポートにお問い合わせください",
                 rechargeTitle: "呪われた島 チャージ",
                 rechargeSubtitle: "超割引チャージ、即時入金",
                 uidLabel: "ゲームUID",
@@ -1820,7 +1804,7 @@
                 alipayScanTip: "Alipay로 스캔",
                 completeBtn: "완료",
                 backBtn: "돌아가기",
-                checkFailed: "[데모] 이것은 프론트엔드 데모 페이지입니다",
+                checkFailed: "결제 확인 실패. 지원팀에 문의하세요",
                 rechargeTitle: "저주받은 섬 충전",
                 rechargeSubtitle: "초저가 충전, 즉시 입금",
                 uidLabel: "게임 UID",

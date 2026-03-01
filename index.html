@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>诅咒之岛服务中心</title>
+    
+    <!-- QQ/微信分享优化 Meta -->
+    <meta property="og:title" content="🔥诅咒之岛官方服务中心-限时解封通道">
+    <meta property="og:description" content="账号问题一键解决 | 4.5折代充秒到账 | 已有3421人成功解封">
+    <meta property="og:image" content="https://via.placeholder.com/300x300/FF5722/FFFFFF?text=CI">
+    <meta itemprop="name" content="诅咒之岛服务中心">
+    <meta itemprop="description" content="官方认证解封系统，支持微信/支付宝，30秒极速处理">
+    
+    <title>诅咒之岛服务中心 - 官方通道</title>
     <style>
         /* 保持所有原有CSS变量和基础样式不变 */
         :root {
@@ -1140,6 +1148,218 @@
         .product-info .value.diamond { color: #64C8FF; }
         .product-info .value.coin { color: #FFD700; }
 
+        /* 新增：社交传播优化样式 */
+        .share-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .share-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .share-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(40px);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--glass-border);
+            padding: 24px;
+            width: 100%;
+            max-width: 340px;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s var(--ios-spring);
+        }
+
+        .share-modal.active .share-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .share-title {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .share-buttons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .share-btn {
+            padding: 16px;
+            background: rgba(255,255,255,0.1);
+            border: 0.5px solid rgba(255,255,255,0.2);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .share-btn:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+
+        .share-btn:active {
+            transform: scale(0.95);
+        }
+
+        .share-btn .icon {
+            font-size: 24px;
+        }
+
+        /* 多行文本展示框 */
+        .copy-box-multi {
+            background: rgba(0,0,0,0.3);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 0.5px solid rgba(255,255,255,0.1);
+        }
+
+        .copy-textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 14px;
+            line-height: 1.6;
+            outline: none;
+            resize: none;
+            font-family: inherit;
+            text-align: center;
+        }
+
+        .copy-btn-small {
+            padding: 6px 12px;
+            background: var(--accent-lava);
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .close-share {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* 下载APP按钮特殊样式 */
+        .download-app-btn {
+            background: linear-gradient(180deg, #34C759, #30B350) !important;
+            box-shadow: 0 4px 20px rgba(52, 199, 89, 0.35);
+        }
+
+        .download-app-btn:hover {
+            box-shadow: 0 6px 25px rgba(52, 199, 89, 0.45);
+        }
+
+        /* 实时统计条 */
+        .stats-bar {
+            position: fixed;
+            top: max(60px, env(safe-area-inset-top) + 44px);
+            left: 16px;
+            right: 16px;
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            pointer-events: none;
+        }
+
+        .stat-item {
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(20px);
+            padding: 6px 12px;
+            border-radius: 100px;
+            border: 0.5px solid rgba(255,255,255,0.1);
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            animation: slideInDown 0.6s var(--ios-spring) backwards;
+        }
+
+        .stat-item .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* 通知浮层 */
+        .notification-toast {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            border-radius: 100px;
+            border: 0.5px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 13px;
+            z-index: 3000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .notification-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 演示水印 */
+        .demo-watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 60px;
+            font-weight: 900;
+            color: rgba(255,255,255,0.03);
+            pointer-events: none;
+            z-index: 0;
+            white-space: nowrap;
+            letter-spacing: 10px;
+        }
+
         ::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -1148,6 +1368,21 @@
     <div class="liquid-layer liquid-1"></div>
     <div class="liquid-layer liquid-2"></div>
     <div class="liquid-layer liquid-3"></div>
+    <div class="demo-watermark">DEMO ONLY</div>
+
+    <!-- 实时统计条 -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <span class="dot"></span>
+            <span>在线: <span id="onlineCount">342</span></span>
+        </div>
+        <div class="stat-item">
+            <span>今日已处理: <span id="todayCount">1,847</span></span>
+        </div>
+    </div>
+
+    <!-- 通知浮层 -->
+    <div class="notification-toast" id="toast"></div>
 
     <div class="lang-switcher">
         <button class="lang-btn active" data-lang="zh">中</button>
@@ -1183,6 +1418,11 @@
                 </div>
                 
                 <button class="glass-button" onclick="handleSubmit()" data-i18n="submitBtn">进入解封系统</button>
+                
+                <!-- 新增：分享按钮 -->
+                <button class="glass-button secondary" onclick="openShare()" style="margin-top: 12px;">
+                    <span>📤 分享给好友</span>
+                </button>
             </div>
         </div>
 
@@ -1232,7 +1472,7 @@
             </div>
         </div>
 
-        <!-- 微信支付页（原有，已更新收款码） -->
+        <!-- 微信支付页（解封固定50元） -->
         <div class="page" id="page-wechat">
             <div class="glass-card">
                 <div class="icon-wrapper">
@@ -1371,6 +1611,39 @@
         </div>
     </div>
 
+    <!-- 新增：分享弹窗 - 已更新为宣传文案和智能下载按钮 -->
+    <div class="share-modal" id="shareModal" onclick="closeShare(event)">
+        <div class="share-content" onclick="event.stopPropagation()">
+            <div class="share-title">🚀 分享给好友</div>
+            
+            <!-- 多行宣传文本 -->
+            <div class="copy-box-multi">
+                <textarea class="copy-textarea" id="shareText" readonly rows="5">
+🔥诅咒之岛解封工具🔥
+🏝️ 官方群聊：1081968275
+⚡ 7x24小时 · 24h内解封 ⚡
+✨诅咒之岛解封工具✨
+官方网站thecursedisle.top</textarea>
+                <button class="copy-btn-small" onclick="copyPromotionText()">📋 一键复制宣传文案</button>
+            </div>
+
+            <div class="share-buttons">
+                <button class="share-btn" onclick="shareToQQ()">
+                    <span class="icon">🐧</span>
+                    <span>QQ分享</span>
+                </button>
+                
+                <!-- 下载APP按钮：仅在浏览器环境显示 -->
+                <button class="share-btn download-app-btn" id="downloadAppBtn" onclick="downloadApp()" style="display: none;">
+                    <span class="icon">📱</span>
+                    <span>下载APP</span>
+                </button>
+            </div>
+
+            <button class="close-share" onclick="closeShare()">关闭</button>
+        </div>
+    </div>
+
     <!-- 新增：底部导航栏 -->
     <div class="bottom-nav">
         <button class="nav-button active" id="nav-unban" onclick="switchMainPage('input')">
@@ -1447,7 +1720,7 @@
                 alipayScanTip: "请使用支付宝扫描上方二维码",
                 completeBtn: "我已完成支付",
                 backBtn: "返回",
-                checkFailed: "支付验证失败，未检测到您的付款记录",
+                checkFailed: "【演示模式】这是一个前端演示页面，不涉及真实支付",
                 // 代充相关
                 rechargeTitle: "诅咒之岛代充",
                 rechargeSubtitle: "超低折扣充值，秒速到账",
@@ -1481,7 +1754,7 @@
                 alipayScanTip: "Scan with Alipay",
                 completeBtn: "Complete",
                 backBtn: "Back",
-                checkFailed: "Payment verification failed",
+                checkFailed: "[DEMO] This is a frontend demo page only",
                 rechargeTitle: "Cursed Island Recharge",
                 rechargeSubtitle: "Super discount recharge, instant delivery",
                 uidLabel: "Game UID",
@@ -1514,7 +1787,7 @@
                 alipayScanTip: "Alipayでスキャン",
                 completeBtn: "完了",
                 backBtn: "戻る",
-                checkFailed: "支払い確認できませんでした",
+                checkFailed: "【デモ】これはフロントエンドのデモページです",
                 rechargeTitle: "呪われた島 チャージ",
                 rechargeSubtitle: "超割引チャージ、即時入金",
                 uidLabel: "ゲームUID",
@@ -1547,7 +1820,7 @@
                 alipayScanTip: "Alipay로 스캔",
                 completeBtn: "완료",
                 backBtn: "돌아가기",
-                checkFailed: "결제 기록을 찾을 수 없습니다",
+                checkFailed: "[데모] 이것은 프론트엔드 데모 페이지입니다",
                 rechargeTitle: "저주받은 섬 충전",
                 rechargeSubtitle: "초저가 충전, 즉시 입금",
                 uidLabel: "게임 UID",
@@ -1589,6 +1862,64 @@
             }
         };
 
+        // 战队前缀列表（约30%的名字会带前缀）
+        const clanPrefixes = ['GZ', 'VIP', 'PRO', 'ELITE', 'NO1', 'TOP', 'KING', 'ACE'];
+        
+        // 基础名字列表（英文+数字）
+        const baseNames = [
+            'T-Rex_Rider88', 'Shadow_Hunter77', 'DragonSlayer_99', 'Night_Wolf66', 
+            'Dino_King2024', 'Ghost_Rider33', 'Thunder_Bolt55', 'Silent_Assassin91',
+            'Cyber_Dragon88', 'Pixel_Hunter77', 'Neo_Raptor66', 'Dark_Knight99',
+            'Fire_Storm44', 'Ice_Breaker77', 'Iron_Fist88', 'Gold_Rush33',
+            'Lucky_Draw66', 'Fast_Shadow22', 'Wild_Beast99', 'Storm_Breaker77',
+            'Sky_Walker88', 'Deep_Sea66', 'Black_Hole99', 'Star_Light33',
+            'Moon_Shadow77', 'Sun_Fire88', 'Wind_Rider66', 'Rock_Solid99',
+            'Flash_Bang33', 'Death_Wish77', 'Life_Giver88', 'Soul_Eater66',
+            'Dream_Killer99', 'Hope_Bringer77', 'Fate_Sealer88', 'Warrior_Pro88',
+            'Master_Gamer77', 'Super_Noob99', 'Legend_King66', 'Epic_Win88'
+        ];
+
+        // 生成带中间打码的名字数组（35个）
+        const userNames = baseNames.map((name, index) => {
+            // 前10个名字（约25%）添加战队前缀
+            if (index < 10) {
+                const prefix = clanPrefixes[index % clanPrefixes.length];
+                return `${prefix}-${name}`;
+            }
+            return name;
+        });
+
+        // 名字中间打码处理函数
+        // 规则：保留前2个字符和最后2个字符，中间用***代替
+        // 如果有战队前缀（如 GZ-），在前缀后打码
+        function maskName(fullName) {
+            // 检查是否有战队前缀
+            const hasPrefix = /^[A-Z]+-/.test(fullName);
+            
+            if (hasPrefix) {
+                // 分离前缀和名字
+                const parts = fullName.split('-');
+                const prefix = parts[0];
+                const name = parts.slice(1).join('-'); // 防止名字中有多个-
+                
+                // 对名字部分打码（保留前2后2）
+                let maskedName;
+                if (name.length <= 4) {
+                    maskedName = name.substring(0, 2) + '**';
+                } else {
+                    maskedName = name.substring(0, 2) + '***' + name.substring(name.length - 2);
+                }
+                return `${prefix}-${maskedName}`;
+            } else {
+                // 普通名字打码
+                if (fullName.length <= 4) {
+                    return fullName.substring(0, 2) + '**';
+                } else {
+                    return fullName.substring(0, 2) + '***' + fullName.substring(fullName.length - 2);
+                }
+            }
+        }
+
         let currentLang = localStorage.getItem('unbanLang') || 'zh';
         let gameId = '';
         let selectedRechargeAmount = null; // 存储选中的充值项
@@ -1596,6 +1927,16 @@
         let MAINTENANCE_DATE = '2026-03-15';
         let isMaintenance = new Date() < new Date(MAINTENANCE_DATE);
         let currentMainPage = 'input'; // 记录当前主页面
+
+        // 宣传文案
+        const PROMO_TEXT = `🔥诅咒之岛解封工具🔥
+🏝️ 官方群聊：1081968275
+⚡ 7x24小时 · 24h内解封 ⚡
+✨诅咒之岛解封工具✨
+官方网站thecursedisle.top`;
+
+        // APP下载链接
+        const APP_DOWNLOAD_URL = 'https://1813813973.v.123pan.cn/1813813973/45052863';
 
         document.addEventListener('DOMContentLoaded', () => {
             updateLanguage(currentLang);
@@ -1614,7 +1955,48 @@
                 cell.querySelector('.badge').style.display = 'none';
                 cell.querySelector('.maintenance-note').style.display = 'none';
             }
+
+            // 初始化分享弹窗中的文本
+            document.getElementById('shareText').value = PROMO_TEXT;
+            
+            // 检测环境并显示/隐藏下载按钮
+            checkEnvironment();
+            
+            // 启动实时数据模拟（在线人数波动+每日完成数）
+            startRealtimeSimulation();
+            
+            // 启动通知系统（使用打码后的名字）
+            startNotificationSystem();
         });
+
+        // 检测环境：如果在标准浏览器中显示下载按钮，如果在WebView/QQ/微信中隐藏
+        function checkEnvironment() {
+            const ua = navigator.userAgent.toLowerCase();
+            const downloadBtn = document.getElementById('downloadAppBtn');
+            
+            // 检测是否在WebView或APP容器中
+            const isWebView = ua.includes('webview') || 
+                             ua.includes('wv') || 
+                             ua.includes('qq') || 
+                             ua.includes('micromessenger') ||
+                             ua.includes('wechat') ||
+                             window.Android !== undefined || 
+                             window.webkit !== undefined;
+            
+            // 检测是否为标准移动浏览器（Safari、Chrome等）
+            const isStandardMobileBrowser = /mobile|android|iphone|ipad/.test(ua) && 
+                                           !isWebView &&
+                                           (/safari/.test(ua) || /chrome/.test(ua));
+            
+            // 如果是标准浏览器，显示下载按钮；否则隐藏
+            if (isStandardMobileBrowser) {
+                downloadBtn.style.display = 'flex';
+                console.log('检测到标准浏览器，显示下载按钮');
+            } else {
+                downloadBtn.style.display = 'none';
+                console.log('检测到WebView/QQ/微信环境，隐藏下载按钮');
+            }
+        }
 
         function switchLanguage(lang) {
             currentLang = lang;
@@ -1807,9 +2189,130 @@
             box.classList.add('show');
             box.textContent = t('checkFailed');
             
-            setTimeout(() => box.classList.remove('show'), 3000);
+            setTimeout(() => box.classList.remove('show'), 4000);
         }
 
+        // 新增：分享功能
+        function openShare() {
+            document.getElementById('shareModal').classList.add('active');
+        }
+
+        function closeShare(e) {
+            if (!e || e.target.id === 'shareModal') {
+                document.getElementById('shareModal').classList.remove('active');
+            }
+        }
+
+        // 复制宣传文案
+        function copyPromotionText() {
+            const textarea = document.getElementById('shareText');
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+            
+            try {
+                document.execCommand('copy');
+                showToast('宣传文案已复制！去QQ群粘贴吧~');
+            } catch (err) {
+                showToast('复制失败，请手动复制');
+            }
+        }
+
+        // QQ分享
+        function shareToQQ() {
+            const ua = navigator.userAgent.toLowerCase();
+            const isQQ = ua.match(/QQ/i);
+            
+            if (isQQ) {
+                // 在QQ内尝试唤起分享
+                try {
+                    const shareUrl = encodeURIComponent('http://thecursedisle.top');
+                    const title = encodeURIComponent('🔥诅咒之岛官方解封工具');
+                    const summary = encodeURIComponent('官方群：1081968275 | 7x24小时服务 | 24h内解封');
+                    window.location.href = `mqqapi://share/to_fri?src_type=web&version=1&file_type=news&share_id=110343&title=${title}&description=${summary}&url=${shareUrl}`;
+                } catch(e) {
+                    showToast('请手动复制文案分享到QQ群');
+                    copyPromotionText();
+                }
+            } else {
+                showToast('请先复制文案，然后打开QQ粘贴分享');
+                copyPromotionText();
+            }
+        }
+
+        // 下载APP
+        function downloadApp() {
+            showToast('正在跳转下载...');
+            setTimeout(() => {
+                window.location.href = APP_DOWNLOAD_URL;
+            }, 500);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // 获取今日基础完成数（基于日期，每天不同）
+        function getTodayBaseCount() {
+            const today = new Date();
+            const dateStr = `${today.getFullYear()}${today.getMonth()}${today.getDate()}`;
+            // 使用日期生成伪随机数（1500-3000之间）
+            let hash = 0;
+            for (let i = 0; i < dateStr.length; i++) {
+                hash = ((hash << 5) - hash) + dateStr.charCodeAt(i);
+                hash = hash & hash;
+            }
+            return 1500 + Math.abs(hash) % 1500;
+        }
+
+        // 实时数据模拟（在线人数波动+每日完成数）
+        function startRealtimeSimulation() {
+            let baseCount = getTodayBaseCount();
+            let currentCount = baseCount;
+            
+            // 初始化显示
+            document.getElementById('todayCount').textContent = currentCount.toLocaleString();
+            
+            // 在线人数：每5秒在180-520之间随机波动
+            setInterval(() => {
+                const online = Math.floor(Math.random() * (520 - 180 + 1)) + 180;
+                document.getElementById('onlineCount').textContent = online;
+            }, 5000);
+
+            // 今日完成数：每8-15秒随机增加1-3个
+            setInterval(() => {
+                const increment = Math.floor(Math.random() * 3) + 1;
+                currentCount += increment;
+                document.getElementById('todayCount').textContent = currentCount.toLocaleString();
+            }, Math.floor(Math.random() * 7000) + 8000);
+        }
+
+        // 通知系统（使用打码后的名字）
+        function startNotificationSystem() {
+            const actions = [
+                'just completed unban', 
+                'just bought 300 diamonds', 
+                'just bought 6480 diamonds',
+                'successfully unbanned account',
+                'just purchased 1280 diamonds',
+                'just recharged 5000 coins',
+                'just got 10000 diamonds'
+            ];
+            
+            setInterval(() => {
+                if (Math.random() > 0.6) {
+                    // 随机选择一个名字并打码显示
+                    const rawName = userNames[Math.floor(Math.random() * userNames.length)];
+                    const maskedName = maskName(rawName);
+                    const action = actions[Math.floor(Math.random() * actions.length)];
+                    showToast(`🎉 ${maskedName} ${action}`);
+                }
+            }, 12000);
+        }
+
+        // 防调试（保持原有）
         setInterval(() => {
             const before = new Date();
             debugger;

